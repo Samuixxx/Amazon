@@ -32,11 +32,22 @@ app.use(helmet({
             styleSrc: ["'self'"],
             imgSrc: ["'self'"],
             fontSrc: ["'self'"],
-            objectSrc: ["'self'"],
-            upgradeInsecureRequests: [],
+            objectSrc: ["'none'"], 
+            frameAncestors: ["'none'"], // Non permette l'incorporazione in iframe
+            upgradeInsecureRequests: [], //  Obbliga il protocollo https come protocollo di trasmissione dati
         }
+    },
+    crossOriginEmbedderPolicy: true, // Protegge embedding cross-origin
+    crossOriginOpenerPolicy: { policy: "same-origin" }, // Protegge da attacchi tipo Spectre
+    crossOriginResourcePolicy: { policy: "same-origin" }, // Impedisce di caricare asset cross-origin
+    referrerPolicy: { policy: "no-referrer" }, // Non invia referrer
+    permittedCrossDomainPolicies: { permittedPolicies: "none" }, // Impedisce Flash/Adobe cross-domain policy
+    hsts: {
+        maxAge: 31536000, // 1 anno in secondi come durata massima di una connessione 
+        includeSubDomains: true,
+        preload: true,
     }
-}))
+}));
 
 // -------- RATE LIMITING --------
 app.use(rateLimit({
@@ -47,7 +58,6 @@ app.use(rateLimit({
 }))
 
 // -------- SANITIZATION --------
-app.use(mongoSanitize())
 app.use(xss())
 app.use(hpp())
 
@@ -75,7 +85,7 @@ const httpsOptions = {
 };
 
 https.createServer(httpsOptions, app).listen(process.env.SERVER_PORT, () => {
-    console.log(`HTTPS server is running on port ${process.env.SERVER_PORT}`);
+    console.log(`HTTPS server is running on port ${process.env.SERVER_PORT || 443}`);
 });
 
 // -------- DEFAULT ROUTE --------

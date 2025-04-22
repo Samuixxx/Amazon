@@ -1,5 +1,5 @@
 {
-  "name": "my-project",
+  "name": "amazon-replica",
   "scripts": {
     "dev": "concurrently \"npm run dev --workspace=client\" \"npm run dev --workspace=server\""
   },
@@ -12,5 +12,23 @@
   },
   "dependencies": {
     "path": "^0.12.7"
-  }
+  },
+  "version": "1.0.0",
+  "description": "Replica di **https://amazon.com** creata per capolavoro anno 2024-2025.",
+  "main": "./server/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samuixxx/Amazon.git"
+  },
+  "keywords": [
+    "Amazon",
+    "replica",
+    "shopcenter"
+  ],
+  "author": "Samuele Casalin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Samuixxx/Amazon/issues"
+  },
+  "homepage": "https://github.com/Samuixxx/Amazon#readme"
 }

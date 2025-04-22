@@ -1,5 +1,2 @@
 @use 'sass:math';
-
-@import './variables';
-@import './mixins';
-@import './globals'
+@use './index' as *;

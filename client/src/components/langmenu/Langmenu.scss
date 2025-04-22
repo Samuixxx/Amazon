@@ -1,0 +1,26 @@
+@use 'sass:math' as math;
+@use '../../styles/index' as *;
+
+ul.lang-options {
+    position: absolute;
+    top: 2rem;
+    background-color: $gray-medium;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    list-style: none;
+    display: none; // gestito da gsap
+    opacity: 0;
+    z-index: 100;
+    @include box-shadow(0, 0, 4px, rgba(0, 0, 0, 0.1));
+}
+
+ul > li.lang-option {
+    padding: $padding-sm;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-wrap: nowrap;
+
+    &:hover {
+        background-color: #eee;
+    }
+}
