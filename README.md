@@ -120,4 +120,4 @@ Questo progetto è distribuito sotto licenza **MIT**. Consulta il file LICENSE p
 
 Sviluppato con passione da [@Samuixxx](https://github.com/Samuixxx)  
 📫 Per feedback o collaborazioni: fnidentix@gmail.com
-"""
+
