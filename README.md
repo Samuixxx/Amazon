@@ -55,8 +55,10 @@ amazonreplica/
 
 ### 1. Clona il repository
 
+```bash
 git clone https://github.com/Samuixxx/Amazon.git
 cd amazonreplica
+```
 
 ### 2. Installa le dipendenze
 
@@ -88,8 +90,10 @@ Assicurati di avere i certificati SSL (`key.pem`, `cert.pem`) nella directory `s
 
 Esempio di file `.env` per il server:
 
+```.env
 SERVER_PORT=443
 CLIENT_BUILD_PATH=../client/build
+```
 
 ---
 
@@ -97,8 +101,10 @@ CLIENT_BUILD_PATH=../client/build
 
 Per generare la versione ottimizzata del frontend:
 
+```bash
 cd client
 npm run build
+```
 
 Il backend in modalità `production` servirà automaticamente i file dalla cartella `build`.
 
