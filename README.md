@@ -61,20 +61,24 @@ cd amazonreplica
 ### 2. Installa le dipendenze
 
 # Backend
+
+```bash
 cd server
 npm install
+```
 
 # Frontend
+
+```bash
 cd ../client
 npm install
+```
 
 ### 3. Avvia l’ambiente di sviluppo
 
-# Frontend
-npm start
-
-# Backend
-node index.js
+```bash
+npm run dev
+```
 
 Assicurati di avere i certificati SSL (`key.pem`, `cert.pem`) nella directory `server/ssl`.
 
