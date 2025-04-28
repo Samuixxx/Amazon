@@ -1,0 +1,30 @@
+@use 'sass:math' as math;
+@use '../../styles/index' as *;
+
+nav.categories_navbar {
+    width: 100%;
+    @include flex(center, start);
+    background-color: $navbar-background-color;
+    color: $navbar-text-color;
+    border-bottom: 1px solid $navbar-border-color;
+    @include box-shadow($color: $shadow-navbar);
+
+    > span.categories_span {
+        flex-shrink: 0;
+        padding: calc($padding-sm - 0.2rem) $padding-sm;
+        font-size: $font-size-md;
+        font-family: $font-family;
+        white-space: nowrap;
+        color: $text-dark;
+        background-color: transparent;
+        @include transition(all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1));
+    
+        &:hover {
+            background-color: darken($accent-color, 15%);
+            color: $accent-text-color;
+            @include box-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+            cursor: pointer;
+        }
+    }
+}
+

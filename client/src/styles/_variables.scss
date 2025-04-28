@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+// ------------------------------
+// SPACING (Padding / Gap / Margin)
+// ------------------------------
+$padding-sm: 0.5rem;
+$padding-md: 1rem;
+$padding-lg: 1.5rem;
+$padding-xl: 2rem;
+
+$gap-sm: 0.5rem;
+$gap-md: 1rem;
+$gap-lg: 2rem;
+
+$margin-sm: 0.75rem;
+$margin-md: 1rem;
+$margin-lg: 1.5rem;
+$margin-xl: 2rem;
+
+// ------------------------------
+// NAVBAR / HEADER
+// ------------------------------
+$header-background-color: #e6f0ff;          // Sfondo header chiaro
+$header-text-color: #2d2d2d;                // Testo header
+$header-border-color: #e0e0e0;              // Bordo header
+$header-hover-color: #f3f3f3;               // Hover header
+$header-active-color: #e6f0ff;              // Attivo header (azzurro chiaro)
+
+// Navbar (leggermente più scura per separare visivamente)
+$navbar-background-color: #d0e0ff;          // Navbar più azzurra
+$navbar-text-color: #2d2d2d;
+$navbar-border-color: #c0d0e0;
+$navbar-hover-background: #b0c8ff;
+$navbar-active-background: #a0bfff;
+
+// ------------------------------
+// FOOTER
+// ------------------------------
+$footer-background-color: #e6f0ff;
+$footer-text-color: #2d2d2d;
+$footer-border-color: #d0d8e0;
+
+// ------------------------------
+// MAIN CONTENT AREA
+// ------------------------------
+$page-background-color: #fdfdfd;             // Sfondo principale
+$page-text-color: #333333;                   // Testo principale
+
+// ------------------------------
+// CARDS & BOXES
+// ------------------------------
+$card-background-color: #ffffff;
+$card-border-color: #e0e0e0;
+$card-hover-background: #f5f9ff;
+$card-shadow-color: rgba(0, 0, 0, 0.08);
+
+// ------------------------------
+// MODAL / OVERLAY
+// ------------------------------
+$overlay-background-color: rgba(0, 0, 0, 0.5);
+$modal-background-color: #ffffff;
+
+// ------------------------------
+// SCROLLBAR CUSTOM
+// ------------------------------
+$scrollbar-thumb-color: #b0c4de;
+$scrollbar-track-color: #e6f0ff;
+
+// ------------------------------
+// COLORI ACCENTO (Bottoni / Badge / Link attivi)
+// ------------------------------
+$accent-color: #1e88e5;
+$accent-hover-color: #1565c0;
+$accent-text-color: #ffffff;
+
+$secondary-accent-color: #fbc02d;
+$secondary-hover-color: #f9a825;
+
+// ------------------------------
+// COLORI TESTO
+// ------------------------------
+$text-light: #333333;
+$text-muted: #666666;
+$text-subtle: #999999;
+$text-dark: #000000;
+
+// ------------------------------
+// COLORI BACKGROUND SECONDARI
+// ------------------------------
+$background-light: #fdfdfd;
+$background-medium: #f5f5f5;
+$background-dark: #eeeeee;
+
+// ------------------------------
+// SCALA DI GRIGI
+// ------------------------------
+$gray-light: #e0e0e0;
+$gray-medium: #bdbdbd;
+$gray-dark: #757575;
+
+// ------------------------------
+// COLORI STATO (Alert / Notifiche)
+// ------------------------------
+$success-color: #4caf50;
+$warning-color: #ffb300;
+$error-color: #e53935;
+$info-color: #0288d1;
+
+// ------------------------------
+// BORDI E RAGGI
+// ------------------------------
+$border-radius-df: 1rem;
+$border-radius-circled: 50%;
+$border-radius-sm: 0.5rem;
+
+// ------------------------------
+// FONT E TIPOGRAFIA
+// ------------------------------
+$font-family: 'Roboto', Arial, sans-serif;
+
+$font-size-sm: 0.875rem;
+$font-size-md: 1rem;
+$font-size-lg: 1.25rem;
+$font-size-xl: 1.5rem;
+$font-size-xxl: 2rem;
+
+// ------------------------------
+// OMBRE
+// ------------------------------
+$shadow-default: 0px 4px 8px rgba(0, 0, 0, 0.1);
+$shadow-hover: 0px 6px 12px rgba(0, 0, 0, 0.15);
+$shadow-navbar: 0px 2px 4px rgba(0, 0, 0, 0.08);
+
+// ------------------------------
+// COLORI FORM (Estratti dal codice HTML del form)
+// ------------------------------
+$form-background-color: rgba(255, 255, 255, 0.13);
+$form-border-color: rgba(255, 255, 255, 0.1);
+$form-input-background: rgba(255, 255, 255, 0.07);
+$form-placeholder-color: #e5e5e5;
+$form-button-background: #ffffff;
+$form-button-text-color: #080710;
+$form-social-background: rgba(255, 255, 255, 0.27);
+$form-social-hover-background: rgba(255, 255, 255, 0.47);
+$form-social-text-color: #eaf0fb;
+$form-social-hover-text-color: #ffffff;
+$form-social-fb-background: #3b5998;
+$form-social-google-background: #db4437;
+$form-shadow-color: rgba(8, 7, 16, 0.6);
+$form-backdrop-filter: blur(10px);

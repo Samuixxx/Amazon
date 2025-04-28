@@ -1,0 +1,32 @@
+@use 'sass:math' as math;
+@use '../../styles/index' as *;
+
+section.user_cart {
+    @include flex(center, start);
+    gap: $gap-sm;
+    position: relative;
+
+    > svg{
+        color: $text-light;
+    }
+
+    > h2.cart_ref{
+        font-size: $font-size-md;
+        font-family: $font-family;
+        color: $header-text-color;
+        width: 8rem;
+        align-self: flex-end;
+        margin-top: auto;
+    }
+
+    > span.cart_items_count{
+        position: absolute;
+        left: 9%;
+        top: -25%;
+        font-size: $font-size-md;
+        font-family: $font-family;
+        font-weight: 500;
+        color: $text-subtle;
+        z-index: 2;
+    }  
+}

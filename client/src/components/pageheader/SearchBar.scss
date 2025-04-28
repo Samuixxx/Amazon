@@ -1,0 +1,64 @@
+@use 'sass:math' as math;
+@use '../../styles/index' as *;
+
+form.product_search {
+    width: 53%;
+    height: 2.2rem;
+    @include flex(center, start);
+    gap: $gap-md;
+    background-color: $background-medium;
+    border-radius: $border-radius-sm;
+    border: none;
+    @include transition(all 0.4s ease);
+    @include border-bottom-inset(transparent, 1px);
+
+    &:hover {
+        background-color: $background-light;
+    }
+
+    &:focus-within {
+        @include border-bottom-inset($accent-color, 1px);
+    }
+
+    > input.search_input {
+        width: 100%;
+        height: 100%;
+        padding: $padding-sm;
+        font-size: $font-size-md;
+        font-family: $font-family;
+        color: $text-light;
+        background-color: transparent;
+        outline: none;
+        border: none;
+    
+        &::placeholder {
+            color: $text-subtle;
+            font-style: italic;
+        }
+    }
+
+    > button.search_button {
+        background-color: $accent-color;
+        border-top-right-radius: $border-radius-sm;
+        border-bottom-right-radius: $border-radius-sm;
+        padding-inline: $padding-md;
+        color: $text-light;
+        border: none;
+        cursor: pointer;
+        font-size: $font-size-xl;
+        height: 100%; // 👈 AGGIUNGI QUESTO
+        @include box-shadow(0, 0, 4px, 2px);
+        @include transition(all 0.3s ease);
+    
+        &:hover {
+            background-color: darken($header-hover-color, 10%);
+            cursor: pointer;
+        }
+    
+        &:active {
+            background-color: lighten($header-active-color, 10%);
+            cursor: pointer;
+        }
+    }
+    
+}

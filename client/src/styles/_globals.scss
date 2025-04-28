@@ -1,0 +1,31 @@
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    letter-spacing: 1px;
+    line-height: 1.5;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    width: 100vw;
+    height: 100vh;
+    user-select: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    will-change: text-decoration;
+    transition: text-decoration 0.3s ease-in;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
+svg{
+    pointer-events: none;
+}

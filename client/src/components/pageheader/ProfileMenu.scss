@@ -1,0 +1,22 @@
+@use 'sass:math' as math;
+@use '../../styles/index' as *;
+
+section.profile_menu_container {
+    min-width: 12%;
+    max-width: 12%;
+    @include flex(center, center);
+    margin-left: auto;
+
+    &:active {
+        @include box-shadow(0, 0, 1px, 2px, lighten(#000000, 25%), true);
+    }
+
+    > h2.profile_menu_ref {
+        font-size: $font-size-md;
+        font-family: $font-family;
+        color: $header-text-color;
+        padding: $padding-sm 0 $padding-sm $padding-md;
+        text-wrap: nowrap;
+        margin-right: $margin-md;
+    }
+}

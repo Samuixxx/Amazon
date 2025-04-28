@@ -1,0 +1,98 @@
+@use 'sass:math' as math;
+@use 'sass:color' as color;
+@use '../../styles/index' as *;
+
+form.signin-form {
+    background-color: $form-background-color;
+    border: 1px solid $form-border-color;
+    backdrop-filter: $form-backdrop-filter;
+    padding: $padding-lg;
+    border-radius: 0.8rem;
+    gap: $gap-md;
+    max-width: 400px;
+    width: 100%;
+    @include flex(center, center, column);
+    @include box-shadow(0, 0, 10px, 2px, $form-shadow-color);
+
+    >h1.signup-form-title {
+        color: color.adjust($page-text-color, $lightness: 25%);
+        font-family: $font-family;
+        font-size: $font-size-xl;
+        font-weight: 700;
+        margin-bottom: $margin-md;
+        text-align: center;
+    }
+
+    > div.input-container {
+        width: 100%;
+        position: relative;
+        margin-bottom: $margin-md;
+
+        > input.input-field {
+            width: 100%;
+            background-color: $form-input-background;
+            font-family: $font-family;
+            font-size: $font-size-md;
+            color: $form-placeholder-color;
+            padding: $padding-sm;
+            border: none;
+            outline: none;
+            @include transition(all 0.3s ease-in-out);
+            @include border-bottom-inset($form-border-color, 1px);
+
+            &:focus {
+                border-color: color.adjust($form-button-background, $lightness: -20%);
+                background-color: color.adjust($form-input-background, $lightness: 10%);
+            }
+
+            &:focus+label.input-label {
+                top: -28%;
+                left: 2%;
+                font-size: calc($font-size-md - 0.2rem);
+            }
+        }
+
+        > label.input-label {
+            position: absolute;
+            left: 3%;
+            top: 25%;
+            font-family: $font-family;
+            font-size: $font-size-md;
+            color: $form-placeholder-color;
+            pointer-events: none;
+            background: transparent;
+            @include transition(all 0.3s ease);
+        }
+
+        > span.signin-prompt {
+        font-family: $font-family;
+        font-size: 0.95rem;
+        font-weight: 400;
+        margin-top: $margin-md;
+        color: $form-placeholder-color;
+        text-align: center;
+        @include flex(center, center);
+        gap: $gap-sm;
+
+        > strong {
+            position: relative;
+            cursor: pointer;
+
+            &::before {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background-color: $form-border-color;
+                @include transition(width 0.3s ease-in-out);
+            }
+
+            &:hover::before {
+                width: 100%;
+            }
+        }
+    }
+    }
+}

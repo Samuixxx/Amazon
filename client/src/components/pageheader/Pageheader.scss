@@ -1,0 +1,32 @@
+@use 'sass:math' as math;
+@use '../../styles/index' as *;
+
+header.homepage_header {
+    background-color: scale-color($header-background-color, $lightness: 10%);
+    padding: $padding-sm;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: $gap-sm;
+
+    > img.homepage_logo {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: $border-radius-circled;
+        object-fit: cover;
+    }
+
+    > h1.homepage_title{
+        font-size: $font-size-xl;
+        font-style: italic;
+        color: $header-text-color;
+    }
+
+    > nav.homepage_nav {
+        width: 100%;
+        @include flex(center, start);
+        gap: $gap-lg;
+        margin-left: $margin-lg;
+    }
+}
+
