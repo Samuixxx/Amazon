@@ -2,7 +2,7 @@
 @use 'sass:color' as color;
 @use '../../styles/index' as *;
 
-form.signin-form {
+form.signup-form {
     background-color: $form-background-color;
     border: 1px solid $form-border-color;
     backdrop-filter: $form-backdrop-filter;
@@ -14,6 +14,26 @@ form.signin-form {
     @include flex(center, center, column);
     @include box-shadow(0, 0, 10px, 2px, $form-shadow-color);
 
+    >span.signup-go-back-span {
+        position: absolute;
+        top: 0;
+        left: -20%;
+        cursor: pointer;
+
+        > svg {
+            color: $form-background-color;
+        }
+
+        &:hover {
+            color: color.adjust($form-background-color, $lightness: 15%);
+        }
+
+        &:active {
+            transform: scale(0.98);
+        }
+
+    }
+
     >h1.signup-form-title {
         color: color.adjust($page-text-color, $lightness: 25%);
         font-family: $font-family;
@@ -23,13 +43,39 @@ form.signin-form {
         text-align: center;
     }
 
-    > div.input-container {
+    >div.input-container {
         width: 100%;
         position: relative;
         margin-bottom: $margin-md;
 
-        > input.input-field {
+        >input.input-field {
             width: 100%;
+            background-color: $form-input-background;
+            font-family: $font-family;
+            font-size: $font-size-md;
+            color: $form-placeholder-color;
+            padding: $padding-sm;
+            border: none;
+            outline: none;
+            @include transition(all 0.3s ease-in-out);
+            @include border-bottom-inset($form-border-color, 1px);
+
+            &:focus {
+                border-color: color.adjust($form-button-background, $lightness: -20%);
+                background-color: color.adjust($form-input-background, $lightness: 10%);
+            }
+
+            &.filled+label.input-label,
+            &:focus+label.input-label {
+                top: -28%;
+                left: 2%;
+                font-size: calc($font-size-md - 0.2rem);
+            }
+        }
+
+        >textarea.input-field {
+            width: 100%;
+            resize: none;
             background-color: $form-input-background;
             font-family: $font-family;
             font-size: $font-size-md;
@@ -52,7 +98,11 @@ form.signin-form {
             }
         }
 
-        > label.input-label {
+        >textarea.input-field~label.input-label {
+            top: 10%;
+        }
+
+        >label.input-label {
             position: absolute;
             left: 3%;
             top: 25%;
@@ -63,8 +113,33 @@ form.signin-form {
             background: transparent;
             @include transition(all 0.3s ease);
         }
+    }
 
-        > span.signin-prompt {
+    >button.submit-button {
+        margin-top: $margin-md;
+        width: 100%;
+        padding-block: calc($padding-md - 0.2rem);
+        background-color: $form-button-background;
+        color: $form-button-text-color;
+        border: none;
+        border-radius: math.div($border-radius-df, 3);
+        font-family: $font-family;
+        font-size: $font-size-md;
+        font-weight: 600;
+        cursor: pointer;
+        @include flex(center, center);
+        @include transition(background-color 0.3s ease, transform 0.2s ease);
+
+        &:hover {
+            background-color: color.adjust($form-button-background, $lightness: -10%);
+        }
+
+        &:active {
+            transform: scale(0.98);
+        }
+    }
+
+    >span.signup-prompt {
         font-family: $font-family;
         font-size: 0.95rem;
         font-weight: 400;
@@ -74,7 +149,7 @@ form.signin-form {
         @include flex(center, center);
         gap: $gap-sm;
 
-        > strong {
+        >strong {
             position: relative;
             cursor: pointer;
 
@@ -93,6 +168,5 @@ form.signin-form {
                 width: 100%;
             }
         }
-    }
     }
 }

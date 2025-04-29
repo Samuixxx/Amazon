@@ -189,7 +189,7 @@ form.signin-form {
         @include flex(center, center);
         gap: $gap-sm;
 
-        >strong {
+        > strong {
             position: relative;
             cursor: pointer;
 
@@ -208,5 +208,14 @@ form.signin-form {
                 width: 100%;
             }
         }
+    }
+
+    > span.error-span {
+        color: red;
+        font-size: $font-size-sm;
+        font-family: $font-family;
+        position: absolute;
+        top: -32%;
+        left: 40%;
     }
 }

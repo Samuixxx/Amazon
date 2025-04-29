@@ -11,10 +11,10 @@ export const FormProvider = ({ children }) => {
         cpsw: '',
         telephone: '',
         state: '',
-        address: '',
+        addressone: '',
+        addresstwo: '',
         city: '',
-        region: '',
-        cap: '',
+        postalcode: '',
         termsaccepted: false
     });
 

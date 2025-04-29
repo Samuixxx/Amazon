@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 *,
 *::after,
 *::before {
@@ -8,6 +10,20 @@
     line-height: 1.5;
 }
 
+*::-webkit-scrollbar {
+    width: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: $scrollbar-thumb-color;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+*::-webkit-scrollbar-track {
+    background: $scrollbar-track-color;
+    border-radius: 3px;
+}
 body {
     font-family: Arial, sans-serif;
     width: 100vw;
