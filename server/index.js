@@ -10,10 +10,12 @@ const path = require('path')
 // -------- HTTPS --------
 const https = require('https')
 
+// -------- ROUTERS --------
+const apiRouter = require('./routers/apiRouter')
+
 // -------- SECURITY MIDDLEWARES --------
 const helmet = require('helmet')
 const rateLimit = require('express-rate-limit')
-const xss = require('xss-clean')
 const hpp = require('hpp')
 
 // -------- OTHER MIDDLEWARES --------
@@ -31,22 +33,23 @@ app.use(helmet({
             styleSrc: ["'self'"],
             imgSrc: ["'self'"],
             fontSrc: ["'self'"],
-            objectSrc: ["'none'"], 
-            frameAncestors: ["'none'"], // Non permette l'incorporazione in iframe
-            upgradeInsecureRequests: [], //  Obbliga il protocollo https come protocollo di trasmissione dati
+            objectSrc: ["'none'"],
+            frameAncestors: ["'none'"],
+            upgradeInsecureRequests: [],
         }
     },
-    crossOriginEmbedderPolicy: true, // Protegge embedding cross-origin
-    crossOriginOpenerPolicy: { policy: "same-origin" }, // Protegge da attacchi tipo Spectre
-    crossOriginResourcePolicy: { policy: "same-origin" }, // Impedisce di caricare asset cross-origin
-    referrerPolicy: { policy: "no-referrer" }, // Non invia referrer
-    permittedCrossDomainPolicies: { permittedPolicies: "none" }, // Impedisce Flash/Adobe cross-domain policy
+    crossOriginEmbedderPolicy: true,
+    crossOriginOpenerPolicy: { policy: "same-origin" },
+    crossOriginResourcePolicy: { policy: "same-origin" },
+    referrerPolicy: { policy: "no-referrer" },
+    permittedCrossDomainPolicies: { permittedPolicies: "none" },
     hsts: {
-        maxAge: 31536000, // 1 anno in secondi come durata massima di una connessione 
+        maxAge: 31536000,
         includeSubDomains: true,
         preload: true,
     }
-}));
+}))
+
 
 // -------- RATE LIMITING --------
 app.use(rateLimit({
@@ -57,7 +60,6 @@ app.use(rateLimit({
 }))
 
 // -------- SANITIZATION --------
-app.use(xss())
 app.use(hpp())
 
 // -------- PERFORMANCE & LOGGING --------
@@ -69,7 +71,7 @@ app.use(cors({
     origin: process.env.CLIENT_ORIGIN_URL,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-XSRF-TOKEN'],
 }))
 
 // -------- PARSING --------
@@ -77,21 +79,30 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+// -------- ROUTERS --------
+app.use("/api", apiRouter)
+
 // -------- START SERVERS --------
 const httpsOptions = {
-    key: fs.readFileSync('../ssl/key.pem'),
-    cert: fs.readFileSync('../ssl/cert.pem')
+    key: fs.readFileSync('../ssl/localhost-key.pem'),
+    cert: fs.readFileSync('../ssl/localhost.pem')
 };
+const SERVER_PORT = parseInt(process.env.SERVER_PORT) || 4444
 
-https.createServer(httpsOptions, app).listen(process.env.SERVER_PORT, () => {
-    console.log(`HTTPS server is running on port ${process.env.SERVER_PORT || 443}`);
-});
+https.createServer(httpsOptions, app)
+    .listen(SERVER_PORT, () => {
+        console.log(`HTTPS server is running on port ${SERVER_PORT}`);
+    })
+    .on('error', (err) => {
+        console.error('❌ HTTPS server error:', err.message);
+    })
 
 // -------- DEFAULT ROUTE --------
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, process.env.CLIENT_BUILD_PATH)))
 
     app.get('*', () => {
-        res.sendFile(path.join(__dirname, '../client/build', 'index.html'))
+        res.sendFile(path.join(__dirname, process.env.CLIENT_BUILD_PATH, 'index.html'))
     })
 }
+

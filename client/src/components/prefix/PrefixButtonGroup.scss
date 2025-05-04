@@ -1,0 +1,41 @@
+@use 'sass:math' as math;
+@use 'sass:color' as color;
+@use '../../styles/index' as *;
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/dropdown";
+@import "~bootstrap/scss/buttons";
+
+div.prefix-dropdown{
+    width: auto;
+    height: 100%;
+
+    & ~ .input-label {
+        left: 20% !important;
+    }
+
+    > button#dropdown-basic {
+        padding: 0.5rem;
+        height: 100%;
+        border-radius: 0;
+        background-color: $form-input-background;
+        font-family: $font-family;
+        color: $form-placeholder-color;
+        font-weight: 400;
+        border: none;
+        @include border-bottom-inset($form-border-color, 1px);
+        border-right: 1px solid $form-border-color;
+    }
+
+    > div.prefix-menu {
+        max-height: 12rem;
+        overflow-y: auto;
+        background-color: #ffffff;
+        
+        > a {
+            @include flex(center, start);
+            gap: $gap-sm;
+        }
+    }
+}

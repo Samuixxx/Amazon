@@ -8,6 +8,7 @@ header.homepage_header {
     align-items: center;
     justify-content: start;
     gap: $gap-sm;
+    position: relative;
 
     > img.homepage_logo {
         width: 2.5rem;
@@ -20,6 +21,7 @@ header.homepage_header {
         font-size: $font-size-xl;
         font-style: italic;
         color: $header-text-color;
+        bottom: 0;
     }
 
     > nav.homepage_nav {

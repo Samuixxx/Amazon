@@ -45,6 +45,7 @@ ul.lang_options {
     background-color: $background-medium;
     list-style: none;
     display: none; // gestito da gsap
+    padding: 0;
     opacity: 0;
     z-index: 100;
     @include box-shadow(0 0 4px 0 rgba(0, 0, 0, 0.1));

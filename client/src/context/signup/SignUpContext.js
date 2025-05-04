@@ -9,13 +9,24 @@ export const FormProvider = ({ children }) => {
         mail: '',
         psw: '',
         cpsw: '',
+        prefix: '',
         telephone: '',
-        state: '',
+        country: '',
         addressone: '',
         addresstwo: '',
         city: '',
         postalcode: '',
-        termsaccepted: false
+        specifications: '',
+        coordinates:{
+            latiditude: null,
+            longitude: null
+        },
+        termsconfirm: {
+            terms: false,
+            privacy: false,
+            cookies: false,
+            marketing: false
+        }
     });
 
     return (
