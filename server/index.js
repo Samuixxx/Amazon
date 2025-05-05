@@ -24,6 +24,11 @@ const cors = require('cors')
 const compression = require('compression')
 const morgan = require('morgan')
 
+// -------- SESSIONS --------
+const session = require('express-session')
+const { RedisStore } = require('connect-redis')
+const redisClient = require('./db/redisClient')
+
 // -------- SECURITY HEADERS --------
 app.use(helmet({
     contentSecurityPolicy: {
@@ -58,6 +63,20 @@ app.use(rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
 }))
+
+// ------- SESSIONS --------
+app.use(session({
+    store: new RedisStore({ client: redisClient }),
+    secret: process.env.SESSIONS_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,  
+        secure: process.env.NODE_ENV === 'production', 
+        maxAge: 1000 * 60 * 60 * 24 * 7,  
+        },
+    })
+)
 
 // -------- SANITIZATION --------
 app.use(hpp())

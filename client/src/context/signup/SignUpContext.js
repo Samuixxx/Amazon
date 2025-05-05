@@ -4,11 +4,11 @@ export const FormContext = createContext();
 
 export const FormProvider = ({ children }) => {
     const [formData, setFormData] = useState({
-        uname: '',
+        name: '',
         surname: '',
-        mail: '',
-        psw: '',
-        cpsw: '',
+        email: '',
+        password: '',
+        confirmpassword: '',
         prefix: '',
         telephone: '',
         country: '',

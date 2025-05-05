@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from "react-i18next"
 import { FormContext } from '../../context/signup/SignUpContext'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 
 const FormStepThree = (onNext, onBack, onChange) => {
     const { t } = useTranslation()
@@ -20,6 +20,10 @@ const FormStepThree = (onNext, onBack, onChange) => {
         }))
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        
+    }
 
     return (
         <form className="signup-form" id="policy-form">

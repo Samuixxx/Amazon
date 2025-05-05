@@ -59,11 +59,11 @@ const FormStepOne = ({ onNext, onChange }) => {
                 {t("Create your account")}
             </h1>
             <div className="input-container">
-                <input type="text" name="uname" id="name-container" className="input-field" autoComplete="off" value={formData.uname} onChange={handleChange} minLength={2}/>
-                <label htmlFor="uname" className="input-label">
+                <input type="text" name="name" id="name-container" className="input-field" autoComplete="off" value={formData.name} onChange={handleChange} minLength={2}/>
+                <label htmlFor="name" className="input-label">
                     {t("Name")}
                 </label>
-                {errors.uname && <span className="error-span">{errors.uname}</span>}
+                {errors.uname && <span className="error-span">{errors.name}</span>}
             </div>
             <div className="input-container">
                 <input type="text" name="surname" id="surname-container" className="input-field" autoComplete="off" value={formData.surname} onChange={handleChange} minLength={2}/>
@@ -73,11 +73,11 @@ const FormStepOne = ({ onNext, onChange }) => {
                 {errors.surname && <span className="error-span">{errors.surname}</span>}
             </div>
             <div className="input-container">
-                <input type="email" name="mail" id="email-container" className="input-field" autoComplete="off" value={formData.mail} onChange={handleChange} />
-                <label htmlFor="mail" className="input-label">
+                <input type="email" name="email" id="email-container" className="input-field" autoComplete="off" value={formData.email} onChange={handleChange} />
+                <label htmlFor="email" className="input-label">
                     {t("Email")}
                 </label>
-                {errors.mail && <span className="error-span">{errors.mail}</span>}
+                {errors.mail && <span className="error-span">{errors.email}</span>}
             </div>
             <div className="input-container" id="telephone-container">
                 <PrefixButtonGroup selected={prefix} onSelect={handlePrefixSelect} />
@@ -88,24 +88,24 @@ const FormStepOne = ({ onNext, onChange }) => {
                 {errors.telephone && <span className="error-span">{errors.telephone}</span>}
             </div>
             <div className="input-container">
-                <input type={isPasswordVisible ? "text" : "password"} name="psw" id="password-container" className="input-field" autoComplete="off" value={formData.psw} onChange={handleChange} />
-                <label htmlFor="psw" className="input-label">
+                <input type={isPasswordVisible ? "text" : "password"} name="password" id="password-container" className="input-field" autoComplete="off" value={formData.password} onChange={handleChange} />
+                <label htmlFor="password" className="input-label">
                     {t("Password")}
                 </label>
                 <button className="toggle-password-visibility" type="button" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
                     <FontAwesomeIcon icon={isPasswordVisible ? faEye : faEyeSlash} size="xl" />
                 </button>
-                {errors.psw && <span className="error-span">{errors.psw}</span>}
+                {errors.psw && <span className="error-span">{errors.password}</span>}
             </div>
             <div className="input-container">
-                <input type={isConfirmPasswordVisible ? "text" : "password"} name="cpsw" id="confirm-password-container" className="input-field" autoComplete="off" value={formData.cpsw} onChange={handleChange} />
-                <label htmlFor="cpsw" className="input-label">
+                <input type={isConfirmPasswordVisible ? "text" : "password"} name="confirmpassword" id="confirm-password-container" className="input-field" autoComplete="off" value={formData.confirmpassword} onChange={handleChange} />
+                <label htmlFor="confirmpassword" className="input-label">
                     {t("Confirm password")}
                 </label>
                 <button className="toggle-password-visibility" type="button" onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)} >
                     <FontAwesomeIcon icon={isConfirmPasswordVisible ? faEye : faEyeSlash} size="xl" />
                 </button>
-                {errors.cpsw && <span className="error-span">{errors.cpsw}</span>}
+                {errors.cpsw && <span className="error-span">{errors.confirmpassword}</span>}
             </div>
             <button type="submit" className="submit-button" onClick={handleProceed}>
                 {t("Proceed")}

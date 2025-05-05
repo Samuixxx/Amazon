@@ -15,18 +15,18 @@ const sanitize = (value) => DOMPurify.sanitize(value.trim())
 const validateStepOne = (data, t) => {
     const errors = {}
 
-    const name = sanitize(data.uname)
+    const name = sanitize(data.name)
     const surname = sanitize(data.surname)
-    const email = sanitize(data.mail)
+    const email = sanitize(data.email)
     const prefix = data.prefix
     const phone = sanitize(data.telephone)
     const password = data.psw
     const confirmPassword = data.cpsw
 
     if (!validator.isAlpha(name, 'en-US', { ignore: ' ' })) {
-        errors.uname = t("Name characters must contain only letters")
+        errors.name = t("Name characters must contain only letters")
     } else if (name.length < 2) {
-        errors.uname = t("Name must be at least 2 letters")
+        errors.name = t("Name must be at least 2 letters")
     }
 
     if (!validator.isAlpha(surname, 'en-US', { ignore: ' ' })) {
@@ -36,7 +36,7 @@ const validateStepOne = (data, t) => {
     }
 
     if (!validator.isEmail(email)) {
-        errors.mail = t("Invalid email format")
+        errors.email = t("Invalid email format")
     }
 
     if (!validator.isMobilePhone(prefix + phone, 'any', { strictMode: true })) {
@@ -44,11 +44,11 @@ const validateStepOne = (data, t) => {
     }
 
     if (!validator.isStrongPassword(password, strongPasswordOptions)) {
-        errors.psw = t("Password must be at least 8 characters long and contain uppercase, lowercase, number and symbol")
+        errors.password = t("Password must be at least 8 characters long and contain uppercase, lowercase, number and symbol")
     }
 
     if (password !== confirmPassword) {
-        errors.cpsw = t("Passwords do not match")
+        errors.confirmpassword = t("Passwords do not match")
     }
 
     return errors
@@ -113,7 +113,7 @@ const handleFinalSubmit = async (data) => {
     const request = await api.post("/api/auth/signup", data)
     const response = request.data
     if(response.ok) {
-
+        
     } else {
         
     }
