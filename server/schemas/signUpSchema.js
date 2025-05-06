@@ -33,7 +33,7 @@ const signUpSchema = Joi.object({
     }),
     specifications: Joi.string().allow('', null).max(300),
     coordinates: Joi.object({
-        latiditude: Joi.number().required(),
+        latitude: Joi.number().required(),
         longitude: Joi.number().required(),
     }),
     termsconfirm: Joi.object({

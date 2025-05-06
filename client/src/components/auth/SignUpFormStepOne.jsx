@@ -2,7 +2,7 @@ import './SignUpForm.scss'
 import { FormContext } from "../../context/signup/SignUpContext"
 import { useTranslation } from 'react-i18next'
 import { useContext, useState, useRef, useEffect } from "react"
-import validateStepOne from '.'
+import { validateStepOne } from '.'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import PrefixButtonGroup from '../prefix/PrefixButtonGroup'
@@ -88,7 +88,7 @@ const FormStepOne = ({ onNext, onChange }) => {
                 {errors.telephone && <span className="error-span">{errors.telephone}</span>}
             </div>
             <div className="input-container">
-                <input type={isPasswordVisible ? "text" : "password"} name="password" id="password-container" className="input-field" autoComplete="off" value={formData.password} onChange={handleChange} />
+                <input type={isPasswordVisible ? "text" : "password"} name="password" id="password-container" className="input-field" autoComplete="off" minLength={8} value={formData.password} onChange={handleChange} />
                 <label htmlFor="password" className="input-label">
                     {t("Password")}
                 </label>
@@ -98,7 +98,7 @@ const FormStepOne = ({ onNext, onChange }) => {
                 {errors.psw && <span className="error-span">{errors.password}</span>}
             </div>
             <div className="input-container">
-                <input type={isConfirmPasswordVisible ? "text" : "password"} name="confirmpassword" id="confirm-password-container" className="input-field" autoComplete="off" value={formData.confirmpassword} onChange={handleChange} />
+                <input type={isConfirmPasswordVisible ? "text" : "password"} name="confirmpassword" id="confirm-password-container" className="input-field" autoComplete="off" minLength={8} value={formData.confirmpassword} onChange={handleChange} />
                 <label htmlFor="confirmpassword" className="input-label">
                     {t("Confirm password")}
                 </label>

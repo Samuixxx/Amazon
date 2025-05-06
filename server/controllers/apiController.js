@@ -4,12 +4,6 @@ const JSONStream = require('JSONStream')
 
 const axios = require('axios')
 
-const pool = require('../db')
-const redis = require('../db/redisClient')
-const bcrypt = require('bcryptjs')
-const { SIGNUP_USER_QUERY } = require('../queries/auth')
-const { generateTokens } = require('../tokens/generateTokens')
-
 const getAllCountries = (req, res) => {
     // Mappatura del parametro della lingua
     const { lang } = req.params
@@ -92,84 +86,4 @@ const validateAddress = async (req, res) => {
     }
 }
 
-//
-//  AUTHENTICATION
-//
-
-const signUpNewUser = async (req, res) => {
-    const {
-        name,
-        surname,
-        email,
-        fullNumber,
-        password,
-        country,
-        addressone,
-        addresstwo,
-        city,
-        postalcode,
-        specifications,
-        coordinates,
-        terms
-    } = req.body
-
-    const { termsAccepted, privacyAccepted, cookiesAccepted, marketingAccepted } = terms
-    const { latitude, longitude } = coordinates
-    const address = addressone + addresstwo
-
-    try {
-        const salt = await bcrypt.genSalt(12)
-        const hashedPassword = await bcrypt.hash(password, salt)
-
-        const result = await pool.query(SIGNUP_USER_QUERY, [
-            name,
-            surname,
-            email,
-            fullNumber,
-            hashedPassword,
-            country,
-            address,
-            city,
-            postalcode,
-            specifications,
-            latitude,
-            longitude,
-            termsAccepted,
-            privacyAccepted,
-            cookiesAccepted,
-            marketingAccepted
-        ])
-
-        const userID = result.rows[0].id
-
-        const { accessToken, refreshToken } = generateTokens(userID)
-
-        res.cookie('access_token', accessToken, {
-            httpOnly: true,
-            sameSite: 'Strict',
-            maxAge: 15 * 60 * 1000 // 15 minuti
-        })
-
-        res.cookie('refresh_token', refreshToken, {
-            httpOnly: true,
-            sameSite: 'Strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 giorni
-        })
-
-        req.session.userID = userID
-        req.session.isAuthenticated = true
-
-        res.status(201).json({
-            ok: true,
-            message: 'User registered',
-            accessToken,
-            refreshToken
-        })
-
-    } catch (error) {
-        res.status(500).json({ message: error.message })
-    }
-}
-
-
-module.exports = { getAllCountries, validateAddress, signUpNewUser }
+module.exports = { getAllCountries, validateAddress }

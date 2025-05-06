@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from "react-i18next"
 import { FormContext } from '../../context/signup/SignUpContext'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
+import { handleFinalSubmit } from '.'
 
-const FormStepThree = (onNext, onBack, onChange) => {
+const FormStepThree = ({ onBack, onChange }) => {
     const { t } = useTranslation()
     const { formData, setFormData } = useContext(FormContext)
 
@@ -20,9 +21,9 @@ const FormStepThree = (onNext, onBack, onChange) => {
         }))
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        
+        await handleFinalSubmit(formData)
     }
 
     return (
@@ -68,7 +69,7 @@ const FormStepThree = (onNext, onBack, onChange) => {
                 </span>
             </div>
 
-            <button type="submit" className="submit-button">{t("Continue")}</button>
+            <button type="submit" className="submit-button" onClick={handleSubmit}>{t("Continue")}</button>
         </form>
     )
 }

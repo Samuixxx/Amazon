@@ -1,9 +1,7 @@
 const Router = require('express')
-const { getAllCountries, validateAddress, signUpNewUser } = require('../controllers/apiController')
+const { getAllCountries, validateAddress } = require('../controllers/apiController')
 const { param, body, validationResult } = require('express-validator')
 const { sanitizeBody } = require('../middleware/sanitizeBody')
-const validateBody = require('../middleware/validateBody')
-const { signUpSchema } = require('../schemas/signUpSchema')
 
 const apiRouter = Router()
 
@@ -49,10 +47,7 @@ apiRouter.post(
     validateAddress
 )
 
-//
-//  AUTH
-//
-apiRouter.post("/auth/signup", validateBody(signUpSchema), sanitizeBody, signUpNewUser)
 
 
-module.exports = apiRouter
+
+module.exports = { apiRouter }

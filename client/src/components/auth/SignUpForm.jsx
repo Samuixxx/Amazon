@@ -19,7 +19,7 @@ const SignUpForm = ({ onChange }) => {
         <FormProvider>
             {step === 1 && <FormStepOne onNext={handleNextStep} onChange={onChange}/>}
             {step === 2 && <FormStepTwo onNext={handleNextStep} onBack={handleBackStep} onChange={onChange} />}
-            {step === 3 && <FormStepThree onNext={handleNextStep} onBack={handleBackStep} onChange={onChange} />}
+            {step === 3 && <FormStepThree onBack={handleBackStep} onChange={onChange} />}
         </FormProvider>
     )
 }

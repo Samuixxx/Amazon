@@ -11,7 +11,8 @@ const path = require('path')
 const https = require('https')
 
 // -------- ROUTERS --------
-const apiRouter = require('./routers/apiRouter')
+const { apiRouter } = require('./routers/apiRouter')
+const { authRouter } = require('./routers/authRouter')
 
 // -------- SECURITY MIDDLEWARES --------
 const helmet = require('helmet')
@@ -28,6 +29,9 @@ const morgan = require('morgan')
 const session = require('express-session')
 const { RedisStore } = require('connect-redis')
 const redisClient = require('./db/redisClient')
+
+// -------- AUTHENTICATION --------
+const passport = require('./config/passport')
 
 // -------- SECURITY HEADERS --------
 app.use(helmet({
@@ -59,7 +63,8 @@ app.use(helmet({
 // -------- RATE LIMITING --------
 app.use(rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
+    max: 5, // limit each IP to 100 requests per windowMs
+    message: "Too much requests, try again in 15 minutes",
     standardHeaders: true,
     legacyHeaders: false,
 }))
@@ -100,6 +105,11 @@ app.use(express.urlencoded({ extended: true }))
 
 // -------- ROUTERS --------
 app.use("/api", apiRouter)
+app.use("/auth", authRouter)
+
+// -------- AUTHENTICATION --------
+app.use(passport.initialize())
+app.use(passport.session())
 
 // -------- START SERVERS --------
 const httpsOptions = {
@@ -113,7 +123,7 @@ https.createServer(httpsOptions, app)
         console.log(`HTTPS server is running on port ${SERVER_PORT}`);
     })
     .on('error', (err) => {
-        console.error('❌ HTTPS server error:', err.message);
+        console.error('HTTPS server error:', err.message);
     })
 
 // -------- DEFAULT ROUTE --------

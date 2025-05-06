@@ -20,8 +20,8 @@ const validateStepOne = (data, t) => {
     const email = sanitize(data.email)
     const prefix = data.prefix
     const phone = sanitize(data.telephone)
-    const password = data.psw
-    const confirmPassword = data.cpsw
+    const password = data.password
+    const confirmPassword = data.confirmpassword
 
     if (!validator.isAlpha(name, 'en-US', { ignore: ' ' })) {
         errors.name = t("Name characters must contain only letters")
@@ -100,8 +100,8 @@ const validateStepTwo = async(data, t, setFormData) => {
             ...prev, 
             coordinates : {
                 ...prev.coordinates,
-                latitude: response.latitude, 
-                longitude: response.longitude 
+                latitude: parseFloat(response.latitude), 
+                longitude: parseFloat(response.longitude)
             }
         }))
     }
@@ -109,13 +109,36 @@ const validateStepTwo = async(data, t, setFormData) => {
     return errors
 }
 
-const handleFinalSubmit = async (data) => {
-    const request = await api.post("/api/auth/signup", data)
-    const response = request.data
-    if(response.ok) {
-        
-    } else {
-        
+const handleFinalSubmit = async (formData) => {
+
+    const requestBody = {
+        name: formData.name,
+        surname: formData.surname,
+        email: formData.email,
+        fullNumber: formData.prefix + formData.telephone,
+        password: formData.password,
+        confirmpassword: formData.confirmpassword,
+        country: formData.country,
+        addressone: formData.addressone,
+        addresstwo: formData.addresstwo,
+        city: formData.city,
+        postalcode: formData.postalcode,
+        specifications: formData.specifications,
+        coordinates: formData.coordinates,
+        termsconfirm: formData.termsconfirm
+    }
+
+    try {
+        const request = await api.post("/api/auth/signup", requestBody)
+        const response = request.data
+
+        if (response.ok) {
+            console.log("Registrazione riuscita!")
+        } else {
+            console.error("Errore nella registrazione:", response.message)
+        }
+    } catch (error) {
+        console.error("Errore di rete:", error)
     }
 }
 
@@ -203,5 +226,4 @@ const getStates = async (i18n) => {
     }
 }
 
-export default validateStepOne
-export { customStyles, getStates, validateStepTwo }
+export { customStyles, getStates, validateStepOne, validateStepTwo, handleFinalSubmit }

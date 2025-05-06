@@ -35,7 +35,6 @@ const FormStepTwo = ({ onNext, onBack, onChange }) => {
         e.preventDefault()
         const validation = validateStepTwo(formData, t, setFormData)
         setErrors(validation)
-        console.log(validation)
         if (!Object.keys(validation).length) onNext()
     }  
 
