@@ -53,6 +53,41 @@ form.signup-form {
         position: relative;
         margin-bottom: $margin-md;
 
+        &.verification-method-container {
+            padding: $padding-md;
+            margin-bottom: 0;
+            @include grid(center, 10% 1fr, auto);
+            column-gap: $gap-md;
+            @include border(1px, $form-border-color);
+            border-radius: $border-radius-df;
+            background-color: transparent;
+            will-change: background-color;
+            @include transition(all 0.2s ease-in);
+
+            &.selected-method {
+                background-color: color.adjust($form-background-color, $lightness: 30%);
+            }
+
+            &:hover {
+                background-color: color.adjust($form-background-color, $lightness: 25%);
+                cursor: pointer;
+            }
+
+            > svg {
+                color: color.adjust($form-placeholder-color, $lightness: -30%);
+            }
+
+            > span.method-span {
+                font-size: $font-size-md;
+                color: $form-placeholder-color;
+                font-family: $font-family;
+                margin-top: math.div($margin-sm, 2);
+                place-self: start;
+            }
+
+        }
+
+
         > input.input-field {
             width: 100%;
             background-color: $form-input-background;
@@ -143,6 +178,10 @@ form.signup-form {
             outline: none;
             cursor: pointer;
             @include flex(center, center);
+
+            > svg {
+                color: color.adjust($form-placeholder-color, $lightness: -15%);
+            }
         }
 
         > span.error-span{
@@ -179,7 +218,7 @@ form.signup-form {
         }
     }
 
-    >span.signup-prompt {
+    > span.signup-prompt {
         font-family: $font-family;
         font-size: 0.95rem;
         font-weight: 400;
@@ -224,8 +263,9 @@ form.signup-form#policy-form {
             cursor: pointer;
             position: relative;
             display: inline-block;
-            transition: all 0.2s ease;
+            @include transition(all 0.2s ease);
             border: 2px solid #a6a6a6;
+            margin-top: math.div($margin-sm, 3);
 
             &:checked {
                 background-color: #febd69; // Giallo Amazon
@@ -257,9 +297,15 @@ form.signup-form#policy-form {
         > span.input-span {
             font-family: $font-family;
             font-size: $font-size-md;
-            font-weight: 400;
+            font-weight: 350;
             color: $form-placeholder-color;
             margin-left: $margin-sm;
         }
     }
+
+    > span.error-span{
+            color: red;
+            font-size: $font-size-sm;
+            font-family: $font-family;
+        }
 }

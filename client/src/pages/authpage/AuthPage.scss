@@ -1,18 +1,94 @@
 @use 'sass:math' as math;
+@use 'sass:color' as color;
 @use '../../styles/index' as *;
 
 main.auth-page-main {
-    min-height: 100vh;
+    max-height: 100vh;
     width: 100%;
-    @include flex(center, center, column);
+    @include flex(center, center); // Changed to row for horizontal layout
     background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
     background-size: 400% 400%;
     animation: gradientBackground 15s ease infinite;
     overflow: hidden;
+
+    >div.form-container,
+    >div.auth-page-bg-container {
+        width: 50%;
+        height: 100%;
+        @include flex(center, center);
+    }
+
+    >div.auth-page-bg-container {
+        position: relative;
+
+        >h1.bg-title {
+            position: absolute;
+            top: 8%;
+            left: 5%;
+            max-width: 80%;
+            font-family: $font-family;
+            font-size: calc($font-size-lg * 2);
+            background: linear-gradient(90deg, #0f3460 15%, #16213e 50%, #1a1a2e 85%);
+            background-size: 300% 100%; // Aumentato per un effetto di transizione più fluido
+            background-clip: text;
+            color: transparent;
+            animation: slideGradient 8s ease-in-out infinite;
+            letter-spacing: 1px;
+        }
+
+        >span.bg-subtitle-span {
+            position: absolute;
+            top: 12%;
+            left: 5%;
+            max-width: 80%;
+            font-family: $font-family;
+            font-size: calc($font-size-lg * 1.4);
+            font-weight: 500;
+            $form-placeholder-color: #b0b0b0;
+        }
+
+        >img.auth-page-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    // Layout for Login - Form on the left, BG on the right (default)
+    &.login-layout {
+        flex-direction: row;
+    }
+
+    // Layout for Signup - BG on the left, Form on the right
+    &.signup-layout {
+        flex-direction: row-reverse;
+    }
 }
 
 @keyframes gradientBackground {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes slideGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 150% 50%;
+    }
+
+    100% {
+        background-position: 300% 50%;
+    }
 }

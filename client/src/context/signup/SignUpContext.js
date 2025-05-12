@@ -18,7 +18,7 @@ export const FormProvider = ({ children }) => {
         postalcode: '',
         specifications: '',
         coordinates:{
-            latiditude: null,
+            latitude: null,
             longitude: null
         },
         termsconfirm: {

@@ -4,6 +4,9 @@ const bcrypt = require('bcryptjs')
 const passport = require('../config/passport')
 const { SIGNUP_USER_QUERY } = require('../queries/auth')
 const { generateTokens } = require('../tokens/generateTokens')
+const { generateOtp } = require('../utils/otp')
+const { v4: uuidv4 } = require('uuid')
+const sendVerificationMail = require('../utils/mailer')
 
 const signUpNewUser = async (req, res) => {
     const {
@@ -52,38 +55,39 @@ const signUpNewUser = async (req, res) => {
         const newUser = result.rows[0]
         const userID = newUser.id
 
-        req.login(newUser, async(err) => {
+        req.login(newUser, async (err) => {
             if (err) return res.status(500).json({ message: 'Errore nel login automatico' });
 
             const { accessToken, refreshToken } = generateTokens(userID)
 
             res.cookie('access_token', accessToken, {
+                secure: process.env.NODE_ENV === "production",
                 httpOnly: true,
                 sameSite: 'Strict',
                 maxAge: 15 * 60 * 1000 // 15 minuti
             })
 
             res.cookie('refresh_token', refreshToken, {
+                secure: process.env.NODE_ENV === "production",
                 httpOnly: true,
                 sameSite: 'Strict',
                 maxAge: 7 * 24 * 60 * 60 * 1000 // 7 giorni
             })
 
             req.session.userID = userID
-            req.session.isAuthenticated = true
 
             // Gestione corretta di Redis
             try {
-                await redis.set(`user${userID}`, JSON.stringify(newUser), { ttl: 15 * 60 * 1000 })
+                await redis.set(`user${userID}`, JSON.stringify(newUser), 'EX', { ttl: 15 * 60 * 1000 })
             } catch (redisError) {
                 console.error('Errore Redis:', redisError);  // log dell'errore
-            } 
+            }
             res.status(201).json({
                 ok: true,
                 message: 'User registered',
-            });
-        });
-
+                route: "/"
+            })
+        })
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -101,14 +105,16 @@ const signInUser = (req, res, next) => {
             const { accessToken, refreshToken } = generateTokens(userID)
 
             res.cookie('access_token', accessToken, {
+                secure: process.env.NODE_ENV === "production",
                 httpOnly: true,
-                sameSite: 'Strict',
+                sameSite: 'None',
                 maxAge: 15 * 60 * 1000 // 15 minuti
             })
 
             res.cookie('refresh_token', refreshToken, {
+                secure: process.env.NODE_ENV === "production",
                 httpOnly: true,
-                sameSite: 'Strict',
+                sameSite: 'None',
                 maxAge: 7 * 24 * 60 * 60 * 1000 // 7 giorni
             })
 
@@ -119,12 +125,56 @@ const signInUser = (req, res, next) => {
             }
 
             req.session.userID = userID
-            req.session.isAuthenticated = true
 
-            return res.json({ message: 'Login successful', user: user });
+            return res.json({ ok: true, route: "/" })
         })
 
-    }) (req, res, next)
+    })(req, res, next)
 }
 
-module.exports = { signUpNewUser, signInUser }
+const getOTP = async (req, res) => {
+    const userMail = req.body.mail
+    const userLanguage = req.cookies['usr.lang'] || 'en'
+    const otp = generateOtp()
+    const clientId = uuidv4()
+
+    try {
+        sendVerificationMail(userMail, otp, userLanguage)
+        await redis.set(`otp:${clientId}`, otp, 'EX', 300)
+        await redis.set(`otp:attempts:${clientId}`, 3)
+        res.json({ ok: true, clientId })
+    } catch (error) {
+        res.status(500).json({ ok: false, message: `Redis error: ${error.message}` })
+    }
+}
+
+const verifyOtp = async (req, res) => {
+    const { code, clientId } = req.body
+
+    const clientAttemptsKey = `otp:attempts:${clientId}`
+    const attempts = await redis.get(clientAttemptsKey)
+    if(!attempts) {
+        await redis.del(clientAttemptsKey)
+        return res.status(400).json({ ok: false, message: 'Attempts finished, ask for another code'})
+    }
+
+    const clientKey = `otp:${clientId}`
+    const ttlMilliseconds = await redis.pTTL(clientKey)
+    if(ttlMilliseconds === -2) return res.status(401).json({ ok: false, message: 'The code is expired, ask for another code'})
+
+    const clientCode = await redis.get(clientKey)
+    if(!clientCode) return res.status(400).json({ ok: false, message: 'No codes for given client id'})
+
+    if(code !== clientCode) {
+        await redis.set(clientAttemptsKey, attempts - 1)
+        return res.status(401).json({ ok: false, message: 'Wrong code'})
+    }
+    
+    await redis.del(clientAttemptsKey)
+    await redis.del(clientKey)
+    res.json({ ok: true })
+}
+
+
+
+module.exports = { signUpNewUser, signInUser, getOTP, verifyOtp }

@@ -1,6 +1,7 @@
 
-import { BrowserRouter as Router} from "react-router-dom";
-import AppRoutes from './routers/AppRoutes';
+import { BrowserRouter as Router} from 'react-router-dom'
+import { Provider } from 'react-redux'
+import AppRoutes from './routers/AppRoutes'
 
 const App = () => {
     return (

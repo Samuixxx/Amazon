@@ -45,7 +45,7 @@ form.signin-form {
                 background-color: color.adjust($form-input-background, $lightness: 10%);
             }
 
-            &:focus+label.input-label {
+            &.filled + label.input-label {
                 top: -28%;
                 left: 2%;
                 font-size: calc($font-size-md - 0.2rem);

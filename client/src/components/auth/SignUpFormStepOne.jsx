@@ -43,13 +43,13 @@ const FormStepOne = ({ onNext, onChange }) => {
 
     useEffect(() => {
         if (formRef.current) {
-            const inputContainers = formRef.current.querySelectorAll(".input-container");
+            const inputContainers = formRef.current.querySelectorAll(".input-container")
             inputContainers.forEach(container => {
-                const input = container.querySelector('.input-field');
+                const input = container.querySelector('.input-field')
                 if (input) {
-                    input.classList.toggle('filled', formData[input.name]?.trim() !== '');
+                    input.classList.toggle('filled', formData[input.name]?.trim() !== '')
                 }
-            });
+            })
         }
     }, [formData])
 

@@ -7,6 +7,11 @@ const app = express()
 const fs = require('fs')
 const path = require('path')
 
+// -------- TRANSLATIONS --------
+const i18next = require('i18next')
+const Backend = require('i18next-fs-backend')
+const middleware = require('i18next-http-middleware')
+
 // -------- HTTPS --------
 const https = require('https')
 
@@ -32,6 +37,25 @@ const redisClient = require('./db/redisClient')
 
 // -------- AUTHENTICATION --------
 const passport = require('./config/passport')
+
+// -------- TRANSLATIONS ---------
+i18next
+    .use(Backend)
+    .use(middleware.LanguageDetector)
+    .init({
+        lng: 'en',
+        fallbackLng: 'en',
+        preload: ['en', 'es', 'it', 'de', 'fr', 'ch'],
+        backend: {
+            loadPath: path.join(__dirname, '/locales/{{lng}}/translation.json')
+        },
+        detection: {
+            order: ['header', 'querystring', 'cookie'],
+            caches: false,
+        },
+    })
+
+app.use(middleware.handle(i18next))
 
 // -------- SECURITY HEADERS --------
 app.use(helmet({
@@ -59,11 +83,10 @@ app.use(helmet({
     }
 }))
 
-
 // -------- RATE LIMITING --------
 app.use(rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // limit each IP to 100 requests per windowMs
+    max: 1000, // limit each IP to 100 requests per windowMs
     message: "Too much requests, try again in 15 minutes",
     standardHeaders: true,
     legacyHeaders: false,
@@ -103,13 +126,25 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// -------- ROUTERS --------
-app.use("/api", apiRouter)
-app.use("/auth", authRouter)
-
 // -------- AUTHENTICATION --------
 app.use(passport.initialize())
 app.use(passport.session())
+
+// -------- DEFAULT ROUTE --------
+if (process.env.NODE_ENV === 'production') {
+    const clientBuildPath = path.resolve(__dirname, process.env.CLIENT_BUILD_PATH)
+    console.log('Resolved client build path:', clientBuildPath)
+
+    app.use(express.static(clientBuildPath))
+
+    app.get('/', (req, res) => {
+        res.sendFile(path.join(clientBuildPath, 'index.html'))
+    })
+}
+
+// -------- ROUTERS --------
+app.use("/api", apiRouter)
+app.use("/auth", authRouter)
 
 // -------- START SERVERS --------
 const httpsOptions = {
@@ -126,12 +161,5 @@ https.createServer(httpsOptions, app)
         console.error('HTTPS server error:', err.message);
     })
 
-// -------- DEFAULT ROUTE --------
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, process.env.CLIENT_BUILD_PATH)))
 
-    app.get('*', () => {
-        res.sendFile(path.join(__dirname, process.env.CLIENT_BUILD_PATH, 'index.html'))
-    })
-}
 

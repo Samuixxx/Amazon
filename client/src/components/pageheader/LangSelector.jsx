@@ -18,6 +18,7 @@ import { Spawn } from './index.js'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { getFlag } from '../../utils/langs/nations.js'
+import api from '../../axios'
 
 const LangSelector = ({ nations }) => {
 
@@ -28,9 +29,19 @@ const LangSelector = ({ nations }) => {
     const flagText = t(i18n.language.split('-')[0])
 
     const handleChangeLanguage = (langId) => {
-        i18n.changeLanguage(langId)
-        if (closeMenu) closeMenu()
-    };
+        const setLang = async (lang) => {
+            i18n.changeLanguage(lang)
+            try {
+                await api.post("/api/preferences/setlang", { lang })
+                closeMenu()
+            } catch (error) {
+                console.error("Errore durante l'impostazione della lingua:", error)
+            }
+        };
+
+        setLang(langId)
+    }
+
 
     const toggleLangmenu = () => {
         setLangMenuState(prev => !prev)

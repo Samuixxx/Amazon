@@ -49,6 +49,7 @@
     "Surname characters must contain only letters": "姓氏只能包含字母",
     "Surname must be at least 2 letters": "姓氏必须至少有两个字母",
     "Invalid email format": "电子邮件格式无效",
+    "Number not valid": "号码无效",
     "Password must be at least 8 characters long and contain uppercase, lowercase, number and symbol": "密码必须至少8个字符，包括大写、小写、数字和符号",
     "Passwords do not match": "密码不匹配",
     "Country is required": "必须选择国家",
@@ -67,6 +68,9 @@
     "and consent to the processing of my personal data for account registration and management purposes.": "并同意为账户注册和管理目的处理我的个人数据。",
     "I consent to the use of functional and tracking cookies to enhance my shopping experience and help analyze user behavior on the platform.": "我同意使用功能性和跟踪性cookies来提升我的购物体验，并帮助分析平台上的用户行为。",
     "I would like to receive promotional emails, exclusive offers, and updates via email or push notifications.": "我希望通过电子邮件或推送通知接收促销邮件、独家优惠和更新。",
-    "Continue": "继续"
+    "Choose your verification method": "选择你的验证方式",
+    "Sms": "短信",
+    "Authentication app": "身份验证应用",
+    "Complete the registration": "完成注册"
   }
   

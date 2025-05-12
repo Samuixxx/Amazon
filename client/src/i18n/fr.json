@@ -49,6 +49,7 @@
     "Surname characters must contain only letters": "Le nom de famille ne doit contenir que des lettres",
     "Surname must be at least 2 letters": "Le nom de famille doit contenir au moins 2 lettres",
     "Invalid email format": "Format d'email invalide",
+    "Number not valid": "Numéro non valide",
     "Password must be at least 8 characters long and contain uppercase, lowercase, number and symbol": "Le mot de passe doit contenir au moins 8 caractères dont majuscules, minuscules, chiffres et symboles",
     "Passwords do not match": "Les mots de passe ne correspondent pas",
     "Country is required": "Le pays est requis",
@@ -67,6 +68,8 @@
     "and consent to the processing of my personal data for account registration and management purposes.": "et consens au traitement de mes données personnelles à des fins d'enregistrement et de gestion de compte.",
     "I consent to the use of functional and tracking cookies to enhance my shopping experience and help analyze user behavior on the platform.": "Je consens à l'utilisation de cookies fonctionnels et de suivi pour améliorer mon expérience d'achat et aider à analyser le comportement des utilisateurs sur la plateforme.",
     "I would like to receive promotional emails, exclusive offers, and updates via email or push notifications.": "J'aimerais recevoir des e-mails promotionnels, des offres exclusives et des mises à jour par e-mail ou notifications push.",
-    "Continue": "Continuer"
-  }
-  
+    "Choose your verification method": "Choisissez votre méthode de vérification",
+    "Sms": "Sms",
+    "Authentication app": "Application d'authentification",
+    "Complete the registration": "Terminer l'inscription"
+}

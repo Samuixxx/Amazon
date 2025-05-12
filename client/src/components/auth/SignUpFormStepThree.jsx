@@ -3,19 +3,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from "react-i18next"
 import { FormContext } from '../../context/signup/SignUpContext'
-import { useContext } from 'react'
-import { handleFinalSubmit } from '.'
+import { useContext, useState, useEffect, useRef } from 'react'
 
-const FormStepThree = ({ onBack, onChange }) => {
+const FormStepThree = ({ onBack, onNext }) => {
     const { t } = useTranslation()
     const { formData, setFormData } = useContext(FormContext)
+    const [errors, setErrors] = useState(null)
+    const formRef = useRef(null)
 
     const handleChange = ({ currentTarget }) => {
         const { name } = currentTarget
         setFormData(prev => ({
             ...prev,
             termsconfirm: {
-                ...prev,
+                ...prev.termsconfirm,
                 [name]: currentTarget.checked
             }
         }))
@@ -23,11 +24,26 @@ const FormStepThree = ({ onBack, onChange }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        await handleFinalSubmit(formData)
+        if (!formData.termsconfirm.terms || !formData.termsconfirm.privacy || !formData.termsconfirm.cookies) { // Correzione qui
+            setErrors(t("General, Privacy and Cookies term needs to be selected before proceeding"))
+        } else {
+            setErrors(null)
+            onNext()
+        }
     }
 
+    useEffect(() => {
+        if (formRef.current) {
+            const checkboxes = formRef.current.querySelectorAll('input[type="checkbox"]'); // Seleziona direttamente le checkbox
+
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = formData.termsconfirm[checkbox.name] || false;
+            });
+        }
+    }, [formData, formRef])
+    
     return (
-        <form className="signup-form" id="policy-form">
+        <form className="signup-form" id="policy-form" onSubmit={handleSubmit} ref={formRef}>
 
             <span className="signup-go-back-span" onClick={onBack}>
                 <FontAwesomeIcon icon={faCircleArrowLeft} size="2x" className="back-icon" />
@@ -38,7 +54,7 @@ const FormStepThree = ({ onBack, onChange }) => {
             </h1>
 
             <div className="input-container">
-                <input type="checkbox" name="terms" className="input-field" required id="termsCheckbox" value={formData.termsconfirm.terms} onChange={handleChange} />
+                <input type="checkbox" name="terms" className="input-field" id="termsCheckbox" value={formData.termsconfirm.terms} onChange={handleChange} />
                 <span className="input-span">
                     {t("I have read and agree to the")}{" "}
                     <a href="/terms-of-service" target="_blank">{t("Terms of Service")}</a>{" "}
@@ -47,7 +63,7 @@ const FormStepThree = ({ onBack, onChange }) => {
             </div>
 
             <div className="input-container">
-                <input type="checkbox" name="privacy" className="input-field" required id="privacyCheckbox" value={formData.termsconfirm.privacy} onChange={handleChange} />
+                <input type="checkbox" name="privacy" className="input-field" id="privacyCheckbox" value={formData.termsconfirm.privacy} onChange={handleChange} />
                 <span className="input-span">
                     {t("I acknowledge the")}{" "}
                     <a href="/privacy-policy" target="_blank">{t("Privacy Policy")}</a>{" "}
@@ -56,7 +72,7 @@ const FormStepThree = ({ onBack, onChange }) => {
             </div>
 
             <div className="input-container">
-                <input type="checkbox" name="cookies" className="input-field" required id="cookiesCheckbox" value={formData.termsconfirm.cookies} onChange={handleChange} />
+                <input type="checkbox" name="cookies" className="input-field" id="cookiesCheckbox" value={formData.termsconfirm.cookies} onChange={handleChange} />
                 <span className="input-span">
                     {t("I consent to the use of functional and tracking cookies to enhance my shopping experience and help analyze user behavior on the platform.")}
                 </span>
@@ -68,8 +84,8 @@ const FormStepThree = ({ onBack, onChange }) => {
                     {t("I would like to receive promotional emails, exclusive offers, and updates via email or push notifications.")}
                 </span>
             </div>
-
-            <button type="submit" className="submit-button" onClick={handleSubmit}>{t("Continue")}</button>
+            {errors && <span className="error-span">{errors}</span>}
+            <button type="submit" className="submit-button">{t("Continue")}</button>
         </form>
     )
 }

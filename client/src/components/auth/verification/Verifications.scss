@@ -1,0 +1,147 @@
+@use 'sass:math' as math;
+@use 'sass:color' as color;
+@use '../../../styles/index' as *;
+
+form.verification-form {
+    background-color: $form-background-color;
+    border: 1px solid $form-border-color;
+    backdrop-filter: $form-backdrop-filter;
+    padding: $padding-lg;
+    border-radius: 0.8rem;
+    gap: $gap-md;
+    max-width: 400px;
+    width: 100%;
+    @include flex(center, center, column);
+    @include box-shadow(0, 0, 10px, 2px, $form-shadow-color);
+
+    >h1.verification-form-title {
+        color: color.adjust($page-text-color, $lightness: 25%);
+        font-family: $font-family;
+        font-size: $font-size-xl;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    >h3.verification-form-subtitle {
+        color: $form-placeholder-color;
+        font-family: $font-family;
+        font-size: $font-size-lg;
+        font-weight: 500;
+        margin-top: -$margin-md;
+        text-align: center;
+    }
+
+    >span.verification-form-description {
+        color: $form-placeholder-color;
+        font-family: $font-family;
+        font-size: $font-size-md;
+        font-weight: 400;
+        text-align: center;
+
+        >strong {
+            font-weight: 500;
+            margin-right: 0.2rem;
+        }
+    }
+
+    >div.verification-form-otp-container {
+        width: 100%;
+        @include flex(center, space-evenly);
+        margin-bottom: $margin-sm;
+
+        >input.verification-form-otp-input {
+            width: 15%;
+            height: 3rem;
+            text-align: center;
+            @include border($form-border-color, 1px, math.div($border-radius-df, 3));
+            background-color: $form-input-background;
+            color: $form-placeholder-color;
+            font-size: $font-size-md;
+            font-family: $font-family;
+            color: $form-placeholder-color;
+            @include box-shadow(0 0 4px 0 $form-shadow-color);
+            @include transition(cursor 0.3s ease);
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+
+    >span.verification-form-otp-again {
+        color: $form-placeholder-color;
+        font-family: $font-family;
+        font-size: $font-size-md;
+        font-weight: 400;
+        text-align: center;
+        margin-top: -$margin-sm;
+        place-self: end;
+
+        > button.resend-button {
+            /* Style for the resend button */
+            background: none;
+            border: none;
+            color: color.adjust($page-text-color, $lightness: 40%);
+            font-family: $font-family;
+            font-size: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            padding: 0;
+            margin-left: 0.3rem;
+            @include transition(color 0.3s ease);
+
+            &::before {
+                content: "";
+                position: absolute;
+                bottom: 10%;
+                left: -2%;
+                width: 0;
+                height: 2px;
+                background-color: $form-border-color;
+                @include transition(width 0.3s ease-in-out);
+            }
+
+            &:hover::before {
+                width: 104%;
+            }
+
+            &:hover {
+                color: color.adjust($page-text-color, $lightness: 15%);
+            }
+
+            &:focus {
+                outline: none;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    >button.submit-button {
+        margin-top: $margin-md;
+        width: 100%;
+        padding-block: calc($padding-md - 0.2rem);
+        background-color: $form-button-background;
+        color: $form-button-text-color;
+        border: none;
+        border-radius: math.div($border-radius-df, 3);
+        font-family: $font-family;
+        font-size: $font-size-md;
+        font-weight: 600;
+        cursor: pointer;
+        @include flex(center, center);
+        @include transition(background-color 0.3s ease, transform 0.2s ease);
+
+        &:hover {
+            background-color: color.adjust($form-button-background, $lightness: -10%);
+        }
+
+        &:active {
+            transform: scale(0.98);
+        }
+    }
+}

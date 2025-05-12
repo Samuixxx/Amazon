@@ -1,7 +1,8 @@
 const Router = require('express')
-const { getAllCountries, validateAddress } = require('../controllers/apiController')
+const { getAllCountries, validateAddress, getXSRFToken, setLanguage } = require('../controllers/apiController')
 const { param, body, validationResult } = require('express-validator')
 const { sanitizeBody } = require('../middleware/sanitizeBody')
+const validateOrigin = require('../middleware/validateOrigin')
 
 const apiRouter = Router()
 
@@ -21,6 +22,8 @@ apiRouter.get(
     },
     getAllCountries
 )
+
+apiRouter.get("/xsrf-token/new", validateOrigin, getXSRFToken)
 
 // POST ROUTES
 apiRouter.post(
@@ -47,6 +50,12 @@ apiRouter.post(
     validateAddress
 )
 
+apiRouter.post(
+            "/preferences/setlang", 
+            body("lang").isString().isIn(["it", "en", "es", "cn", "de", "fr"]).escape(),
+            sanitizeBody,
+            setLanguage           
+            )
 
 
 

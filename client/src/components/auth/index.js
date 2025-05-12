@@ -54,7 +54,7 @@ const validateStepOne = (data, t) => {
     return errors
 }
 
-const validateStepTwo = async(data, t, setFormData) => {
+const validateStepTwo = async (data, t, setFormData) => {
     const errors = {}
 
     const country = data.country
@@ -94,13 +94,12 @@ const validateStepTwo = async(data, t, setFormData) => {
     if (Object.keys(errors).length === 0) {
         const requestBody = [addressLineOne, addressLineTwo, city, postalcode, country].join(",")
         const request = await api.post("/api/address/validateaddress", JSON.stringify({ address: requestBody }))
-        const response = request.data 
-        console.log(response)
+        const response = request.data
         if (response.ok) setFormData(prev => ({
-            ...prev, 
-            coordinates : {
+            ...prev,
+            coordinates: {
                 ...prev.coordinates,
-                latitude: parseFloat(response.latitude), 
+                latitude: parseFloat(response.latitude),
                 longitude: parseFloat(response.longitude)
             }
         }))
@@ -129,17 +128,51 @@ const handleFinalSubmit = async (formData) => {
     }
 
     try {
-        const request = await api.post("/api/auth/signup", requestBody)
+        const request = await api.post("/auth/signup", requestBody)
         const response = request.data
 
         if (response.ok) {
-            console.log("Registrazione riuscita!")
+            return response.route
         } else {
-            console.error("Errore nella registrazione:", response.message)
+            return response.message || "Error during registration. Please try again."
         }
     } catch (error) {
-        console.error("Errore di rete:", error)
+        if (error.response) {
+            console.error("Server error:", error.response.status, error.response.data)
+            return `Registration failed: ${error.response.data.message || 'Something went wrong on the server.'}`
+        } else if (error.request) {
+            console.error("Request error:", error.request)
+            return "Network error: The request did not receive a response. Please check your connection."
+        } else {
+            console.error("Request setup error:", error.message)
+            return "An unexpected error occurred during the request."
+        }
     }
+}
+
+const handleSignInSubmit = async (data) => {
+    try{
+        const request = await api.post("/auth/signin", { email: data.email, password: data.password })
+        const response = request.data
+
+        if(response.ok) {
+            return response.route
+        } else {
+            return response.message || "Error during registration. Please try again"
+        }
+    } catch (error) {
+        if (error.response) {
+            console.error("Server error:", error.response.status, error.response.data)
+            return `Registration failed: ${error.response.data.message || 'Something went wrong on the server.'}`
+        } else if (error.request) {
+            console.error("Request error:", error.request)
+            return "Network error: The request did not receive a response. Please check your connection."
+        } else {
+            console.error("Request setup error:", error.message)
+            return "An unexpected error occurred during the request."
+        }
+    }
+
 }
 
 const customStyles = {
@@ -226,4 +259,4 @@ const getStates = async (i18n) => {
     }
 }
 
-export { customStyles, getStates, validateStepOne, validateStepTwo, handleFinalSubmit }
+export { customStyles, getStates, validateStepOne, validateStepTwo, handleFinalSubmit, handleSignInSubmit }
