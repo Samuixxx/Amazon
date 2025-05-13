@@ -1,7 +1,11 @@
 import './SignInForm.scss'
 import { useTranslation } from "react-i18next"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { setXrsfToken } from '../../features/xsrftoken'
+import { setUser } from '../../features/user'
 import { useNavigate } from 'react-router-dom'
+import api from '../../axios'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGoogle, faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { handleSignInSubmit } from '.'
@@ -9,7 +13,34 @@ import { handleSignInSubmit } from '.'
 const SignInForm = ({ onChange }) => {
     const { t } = useTranslation()
     const [formData, setFormData] = useState({ email: '', password: '' })
+    const [ errors, setErrors ] = useState(null)
     const navigate = useNavigate()
+    const userXsrfToken = useSelector(state => state.token.XSRFTOKEN)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        const controller = new AbortController()
+        const { signal } = controller
+
+        const initializeVerification = async () => {
+            try {
+                const xsrfResponse = await api.get("/api/xsrf-token/new", { signal })
+                const { ok: xsrfOk, xsrfToken } = xsrfResponse.data
+
+                if (xsrfOk) {
+                    dispatch(setXrsfToken(xsrfToken))
+                }
+            } catch (tokenError) {
+                if (!signal.aborted) setErrors(tokenError)
+            }
+        }
+
+        initializeVerification()
+
+        return () => {
+            controller.abort()
+        }
+    }, [dispatch])
 
     const handleChange = ({ currentTarget }) => {
         const { name, value, classList } = currentTarget
@@ -20,15 +51,18 @@ const SignInForm = ({ onChange }) => {
         classList.toggle("filled", value.trim() !== "")
     }
 
-    const handleSubmit = async(event) => {
-        event.preventDefault() // Previene il comportamento predefinito del form
-        const res = await handleSignInSubmit(formData)
-        if(res.startsWith("/")) {
-            navigate(res)
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        const res = await handleSignInSubmit(formData, userXsrfToken)
+
+        if (res && typeof res === 'object' && res.route) {
+            dispatch(setUser(res.user))
+            navigate(res.route)
         } else {
-            console.log(res)
+            setErrors(res.message)
         }
     }
+
 
     return (
         <form className="signin-form" onSubmit={handleSubmit}>
@@ -67,6 +101,7 @@ const SignInForm = ({ onChange }) => {
                 <span className="switch"></span>
                 <span>{t('Remember me')}</span>
             </label>
+            { errors && <span className="error-span">{errors}</span>}
             <button type="submit" className="submit-button">{t('Sign in')}</button>
             <div className="social-login-container">
                 <span className="social-icon">

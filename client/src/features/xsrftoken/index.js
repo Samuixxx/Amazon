@@ -9,12 +9,10 @@ export const tokenSlice = createSlice({
     initialState,
     reducers: {
         setXrsfToken: (state, action) => {
-            console.log('State before modification:', state);
-            state.XSRFTOKEN = action.payload;
-            console.log('State after modification:', state);
+            state.XSRFTOKEN = action.payload
         }
     }
-});
+})
 
 
 export const { setXrsfToken } = tokenSlice.actions

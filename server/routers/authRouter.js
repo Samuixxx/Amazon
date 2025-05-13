@@ -3,7 +3,7 @@ const { sanitizeBody } = require('../middleware/sanitizeBody')
 const validateBody = require('../middleware/validateBody')
 const { signUpSchema } = require('../schemas/signUpSchema')
 const { signInSchema } = require('../schemas/signInSchema')
-const { signUpNewUser, signInUser, getOTP, verifyOtp } = require('../controllers/authController')
+const { signInUser, signUpNewUser, getOTP, verifyOtp } = require('../controllers/authController')
 const { verifyXSRFToken } = require('../controllers/apiController')
 const validateOrigin = require('../middleware/validateOrigin')
 const { body } = require('express-validator')
@@ -13,7 +13,7 @@ const authRouter = Router()
 authRouter.post("/signup", validateBody(signUpSchema), sanitizeBody, validateOrigin, verifyXSRFToken, signUpNewUser)
 authRouter.post("/signin", validateBody(signInSchema), sanitizeBody, validateOrigin, verifyXSRFToken, signInUser)
 authRouter.post(
-    "/signin/getCode",
+    "/signup/getCode",
     body('mail')
         .isEmail()
         .withMessage('Invalid email format')
@@ -25,7 +25,7 @@ authRouter.post(
 )
 
 authRouter.post(
-    "/signin/verifyCode",
+    "/signup/verifyCode",
     body('code')
         .isNumeric()
         .withMessage('Il codice deve essere numerico.')

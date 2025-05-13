@@ -14,16 +14,18 @@
 import './ProfileMenu.scss'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const ProfileMenu = () => {
 
     const { t } = useTranslation()
     const navigate = useNavigate()
+    const userFirstName = useSelector(state => state.user.user?.name)
 
     return (
         <section className="profile_menu_container" onClick={ () => navigate("/auth") }>
             <h2 className="profile_menu_ref">
-                {t('Welcome, Sign in')}
+                {t(`Welcome, ${userFirstName || 'Sign in'}`)}
             </h2>
         </section>
     )

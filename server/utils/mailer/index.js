@@ -26,8 +26,7 @@ const sendVerificationMail = async (to, otpCode, lang) => {
     };
 
     try {
-        const response = await mg.messages.create(DOMAIN, data);
-        console.log('Email inviata con successo!', response);
+        await mg.messages.create(DOMAIN, data);
     } catch (error) {
         console.error('Errore durante l\'invio dell\'email:', error);
     }

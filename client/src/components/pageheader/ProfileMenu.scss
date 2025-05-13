@@ -1,4 +1,5 @@
 @use 'sass:math' as math;
+@use 'sass:color' as color;
 @use '../../styles/index' as *;
 
 section.profile_menu_container {
@@ -8,7 +9,7 @@ section.profile_menu_container {
     margin-left: auto;
 
     &:active {
-        @include box-shadow(0, 0, 1px, 2px, lighten(#000000, 25%), true);
+        @include box-shadow(0, 0, 1px, 2px, color.adjust(#000000, $lightness: 25%), true);
     }
 
     > h2.profile_menu_ref {

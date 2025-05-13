@@ -3,7 +3,7 @@
     "title": "Código OTP",
     "header": "Tu código de verificación",
     "body": "Utiliza el siguiente código OTP para completar tu registro en <strong>ShopHub</strong>:",
-    "expiry": "Este código expirará en 10 minutos.",
+    "expiry": "Este código expirará en 5 minutos.",
     "security_note": "Por tu seguridad, no compartas este código con nadie. ShopHub nunca te lo pedirá por otros medios.",
     "footer": "Si no solicitaste este código, puedes ignorar este correo."
   }

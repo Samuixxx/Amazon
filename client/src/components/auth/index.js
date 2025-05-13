@@ -150,30 +150,52 @@ const handleFinalSubmit = async (formData) => {
     }
 }
 
-const handleSignInSubmit = async (data) => {
-    try{
-        const request = await api.post("/auth/signin", { email: data.email, password: data.password })
+const handleSignInSubmit = async (data, xsrf) => {
+    try {
+        const request = await api.post("/auth/signin", {
+            email: data.email,
+            password: data.password
+        }, {
+            headers: {
+                "X-XSRF-TOKEN": xsrf
+            }
+        })
+
         const response = request.data
 
-        if(response.ok) {
-            return response.route
+        if (response.ok) {
+            return {
+                success: true,
+                route: response.route,
+                user: response.user
+            }
         } else {
-            return response.message || "Error during registration. Please try again"
+            return {
+                success: false,
+                message: response.message || "Errore durante il login"
+            }
         }
     } catch (error) {
+        let message = "Errore sconosciuto."
+
         if (error.response) {
             console.error("Server error:", error.response.status, error.response.data)
-            return `Registration failed: ${error.response.data.message || 'Something went wrong on the server.'}`
+            message = error.response.data.message || 'Qualcosa è andato storto sul server.'
         } else if (error.request) {
             console.error("Request error:", error.request)
-            return "Network error: The request did not receive a response. Please check your connection."
+            message = "Errore di rete: nessuna risposta ricevuta. Controlla la connessione."
         } else {
             console.error("Request setup error:", error.message)
-            return "An unexpected error occurred during the request."
+            message = "Errore durante la preparazione della richiesta."
+        }
+
+        return {
+            success: false,
+            message
         }
     }
-
 }
+
 
 const customStyles = {
     control: (provided, state) => ({

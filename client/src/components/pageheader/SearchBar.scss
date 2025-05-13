@@ -1,4 +1,5 @@
 @use 'sass:math' as math;
+@use 'sass:color' as color;
 @use '../../styles/index' as *;
 
 form.product_search {
@@ -51,12 +52,12 @@ form.product_search {
         @include transition(all 0.3s ease);
     
         &:hover {
-            background-color: darken($header-hover-color, 10%);
+            background-color: color.adjust($header-hover-color, $lightness: 10%);
             cursor: pointer;
         }
     
         &:active {
-            background-color: lighten($header-active-color, 10%);
+            background-color: color.adjust($header-active-color, $lightness: 10%);
             cursor: pointer;
         }
     }

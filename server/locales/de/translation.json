@@ -3,7 +3,7 @@
     "title": "OTP-Code",
     "header": "Dein Bestätigungscode",
     "body": "Verwende den untenstehenden OTP-Code, um deine Registrierung bei <strong>ShopHub</strong> abzuschließen:",
-    "expiry": "Dieser Code läuft in 10 Minuten ab.",
+    "expiry": "Dieser Code läuft in 5 Minuten ab.",
     "security_note": "Zu deiner Sicherheit teile diesen Code mit niemandem. ShopHub wird dich niemals auf anderen Wegen danach fragen.",
     "footer": "Wenn du diesen Code nicht angefordert hast, kannst du diese E-Mail ignorieren."
   }

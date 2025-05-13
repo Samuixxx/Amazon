@@ -53,7 +53,7 @@ const signUpNewUser = async (req, res) => {
         ])
 
         const newUser = result.rows[0]
-        const userID = newUser.id
+        const { userID, name, email, country, cookiesaccepted } = newUser
 
         req.login(newUser, async (err) => {
             if (err) return res.status(500).json({ message: 'Errore nel login automatico' });
@@ -78,14 +78,20 @@ const signUpNewUser = async (req, res) => {
 
             // Gestione corretta di Redis
             try {
-                await redis.set(`user${userID}`, JSON.stringify(newUser), 'EX', { ttl: 15 * 60 * 1000 })
+                await redis.set(`user${userID}`, JSON.stringify(newUser))
             } catch (redisError) {
                 console.error('Errore Redis:', redisError);  // log dell'errore
             }
             res.status(201).json({
                 ok: true,
                 message: 'User registered',
-                route: "/"
+                route: "/",
+                user: {
+                    name,
+                    email,
+                    country,
+                    cookiesAccepted: cookiesaccepted
+                }
             })
         })
     } catch (error) {
@@ -101,7 +107,7 @@ const signInUser = (req, res, next) => {
         req.login(user, (err) => {
             if (err) { return next(err); }
 
-            const userID = user.id
+            const { userID, name, email, country, cookiesaccepted } = user
             const { accessToken, refreshToken } = generateTokens(userID)
 
             res.cookie('access_token', accessToken, {
@@ -119,14 +125,23 @@ const signInUser = (req, res, next) => {
             })
 
             try {
-                redis.set(`user${userID}`, JSON.stringify(user), { ttl: 15 * 60 * 1000 })
+                redis.set(`user${userID}`, JSON.stringify(user))
             } catch (redisError) {
                 console.error('Errore di redis')
             }
 
             req.session.userID = userID
 
-            return res.json({ ok: true, route: "/" })
+            return res.json({ 
+                ok: true, 
+                route: "/",
+                user: {
+                    name,
+                    email,
+                    country,
+                    cookiesAccepted: cookiesaccepted
+                }
+            })
         })
 
     })(req, res, next)
@@ -167,7 +182,7 @@ const verifyOtp = async (req, res) => {
 
     if(code !== clientCode) {
         await redis.set(clientAttemptsKey, attempts - 1)
-        return res.status(401).json({ ok: false, message: 'Wrong code'})
+        return res.status(401).json({ ok: false, message: `Wrong code, ${attempts} attempts left`})
     }
     
     await redis.del(clientAttemptsKey)
@@ -177,4 +192,4 @@ const verifyOtp = async (req, res) => {
 
 
 
-module.exports = { signUpNewUser, signInUser, getOTP, verifyOtp }
+module.exports = { signInUser, signUpNewUser, getOTP, verifyOtp }
