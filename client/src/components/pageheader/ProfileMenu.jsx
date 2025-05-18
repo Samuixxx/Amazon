@@ -20,10 +20,11 @@ const ProfileMenu = () => {
 
     const { t } = useTranslation()
     const navigate = useNavigate()
-    const userFirstName = useSelector(state => state.user.user?.name)
+    const userFirstName = useSelector(state => state.user.userDisplayName)
+    const userAuthenticated = useSelector(state => state.user.isAuthenticated)
 
     return (
-        <section className="profile_menu_container" onClick={ () => navigate("/auth") }>
+        <section className="profile_menu_container" onClick={ () => !userAuthenticated && navigate("/auth") }>
             <h2 className="profile_menu_ref">
                 {t(`Welcome, ${userFirstName || 'Sign in'}`)}
             </h2>

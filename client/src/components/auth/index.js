@@ -1,6 +1,7 @@
 import validator from 'validator'
 import DOMPurify from 'dompurify'
 import api from '../../axios'
+import i18n from '../../i18n'
 
 const strongPasswordOptions = {
     minLength: 8,
@@ -12,7 +13,7 @@ const strongPasswordOptions = {
 
 const sanitize = (value) => DOMPurify.sanitize(value.trim())
 
-const validateStepOne = (data, t) => {
+const validateStepOne = (data) => {
     const errors = {}
 
     const name = sanitize(data.name)
@@ -24,37 +25,37 @@ const validateStepOne = (data, t) => {
     const confirmPassword = data.confirmpassword
 
     if (!validator.isAlpha(name, 'en-US', { ignore: ' ' })) {
-        errors.name = t("Name characters must contain only letters")
+        errors.name = i18n.t("Name characters must contain only letters")
     } else if (name.length < 2) {
-        errors.name = t("Name must be at least 2 letters")
+        errors.name = i18n.t("Name must be at least 2 letters")
     }
 
     if (!validator.isAlpha(surname, 'en-US', { ignore: ' ' })) {
-        errors.surname = t("Surname characters must contain only letters")
+        errors.surname = i18n.t("Surname characters must contain only letters")
     } else if (surname.length < 2) {
-        errors.surname = t("Surname must be at least 2 letters")
+        errors.surname = i18n.t("Surname must be at least 2 letters")
     }
 
     if (!validator.isEmail(email)) {
-        errors.email = t("Invalid email format")
+        errors.email = i18n.t("Invalid email format")
     }
 
     if (!validator.isMobilePhone(prefix + phone, 'any', { strictMode: true })) {
-        errors.telephone = t("Number not valid")
+        errors.telephone = i18n.t("Number not valid")
     }
 
     if (!validator.isStrongPassword(password, strongPasswordOptions)) {
-        errors.password = t("Password must be at least 8 characters long and contain uppercase, lowercase, number and symbol")
+        errors.password = i18n.t("Password must be at least 8 characters long and contain uppercase, lowercase, number and symbol")
     }
 
     if (password !== confirmPassword) {
-        errors.confirmpassword = t("Passwords do not match")
+        errors.confirmpassword = i18n.t("Passwords do not match")
     }
 
     return errors
 }
 
-const validateStepTwo = async (data, t, setFormData) => {
+const validateStepTwo = async (data, setFormData) => {
     const errors = {}
 
     const country = data.country
@@ -65,30 +66,30 @@ const validateStepTwo = async (data, t, setFormData) => {
     const specifications = sanitize(data.specifications)
 
     if (!country) {
-        errors.country = t("Country is required")
+        errors.country = i18n.t("Country is required")
     }
 
     if (!addressLineOne || !validator.isLength(addressLineOne, { min: 3 })) {
-        errors.addressone = t("Address must be at least 3 characters long")
+        errors.addressone = i18n.t("Address must be at least 3 characters long")
     } else if (!validator.matches(addressLineOne, /^[a-zA-Z0-9\s/\-,.]+$/)) {
-        errors.addressone = t("Address can only contain letters, numbers, spaces, slashes, hyphens, commas, and periods")
+        errors.addressone = i18n.t("Address can only contain letters, numbers, spaces, slashes, hyphens, commas, and periods")
     }
 
     if (addressLineTwo && !validator.matches(addressLineTwo, /^[a-zA-Z0-9\s/\-,.]*$/)) {
-        errors.addresstwo = t("Second address line can only contain letters, numbers, spaces, slashes, hyphens, commas, and periods")
+        errors.addresstwo = i18n.t("Second address line can only contain letters, numbers, spaces, slashes, hyphens, commas, and periods")
     }
 
     if (!city || !validator.isAlpha(city.replace(/\s/g, ''))) {
-        errors.city = t("City name must contain only letters")
+        errors.city = i18n.t("City name must contain only letters")
     }
 
     if (!postalcode || !validator.isPostalCode(postalcode, 'any')) {
-        errors.postalcode = t("Invalid postal code")
+        errors.postalcode = i18n.t("Invalid postal code")
     }
 
     // Specifications: optional max length
     if (specifications && !validator.isLength(specifications, { max: 300 })) {
-        errors.specifications = t("Specifications can't be more than 300 characters")
+        errors.specifications = i18n.t("Specifications can't be more than 300 characters")
     }
 
     if (Object.keys(errors).length === 0) {

@@ -1,6 +1,6 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
+import i18n from 'i18next'
+import { initReactI18next } from 'react-i18next'
+import LanguageDetector from 'i18next-browser-languagedetector'
 
 import en from './en.json';
 import it from './it.json';
@@ -27,7 +27,7 @@ i18n
       order: ['navigator', 'htmlTag'],
       caches: [],
     },
-  });
+  })
 
-export default i18n;
-export const languages = ["en", "it", "fr", "de", "es", "zh"];
+export default i18n
+export const languages = ["en", "it", "fr", "de", "es", "zh"]

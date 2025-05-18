@@ -44,6 +44,8 @@
     "City": "Stadt",
     "Postal code": "Postleitzahl",
     "Specifications": "Spezifikationen",
+    "OR": "ODER",
+    "Sign up with:": "Registrieren mit:",
     "Name characters must contain only letters": "Der Name darf nur Buchstaben enthalten",
     "Name must be at least 2 letters": "Der Name muss mindestens 2 Buchstaben lang sein",
     "Surname characters must contain only letters": "Der Nachname darf nur Buchstaben enthalten",
@@ -70,6 +72,17 @@
     "I would like to receive promotional emails, exclusive offers, and updates via email or push notifications.": "Ich möchte Werbe-E-Mails, exklusive Angebote und Updates per E-Mail oder Push-Benachrichtigungen erhalten.",
     "Choose your verification method": "Wählen Sie Ihre Verifizierungsmethode",
     "Sms": "SMS",
-    "Authentication app": "Authentifizierungs-App",
-    "Complete the registration": "Registrierung abschließen"
+    "Phone call": "Telefonanruf",
+    "Sms verification": "SMS-Verifizierung",
+    "Please enter the code you received on your phone to complete registration": "Bitte gib den Code ein, den du auf deinem Telefon erhalten hast, um die Registrierung abzuschließen",
+    "Confirm your Shophub registration": "Bestätige deine Shophub-Registrierung",
+    "Email Verification": "E-Mail-Verifizierung",
+    "We have sent a One-Time Password (OTP) to:": "Wir haben ein Einmalpasswort (OTP) gesendet an:",
+    "Please enter the code you received in your email to complete registration.": "Bitte gib den Code aus deiner E-Mail ein, um die Registrierung abzuschließen.",
+    "Didn't receive the code?": "Code nicht erhalten?",
+    "Resend OTP": "Code erneut senden",
+    "Verify Code & Complete Registration": "Code verifizieren & Registrierung abschließen",
+    "The code must be 6 digits.": "Der Code muss 6 Ziffern lang sein.",
+    "Error verifying the code.": "Fehler bei der Codeüberprüfung.",
+    "Error during registration.": "Fehler bei der Registrierung."
 }

@@ -32,4 +32,4 @@ const sendVerificationMail = async (to, otpCode, lang) => {
     }
 };
 
-module.exports = sendVerificationMail;
+module.exports = { sendVerificationMail };

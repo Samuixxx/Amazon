@@ -34,7 +34,7 @@ const FormStepTwo = ({ onNext, onBack, onChange }) => {
 
     const handleProceed = (e) => {
         e.preventDefault()
-        const validation = validateStepTwo(formData, t, setFormData)
+        const validation = validateStepTwo(formData, setFormData)
         setErrors(validation)
         if (!Object.keys(validation).length) onNext()
     }
@@ -89,7 +89,7 @@ const FormStepTwo = ({ onNext, onBack, onChange }) => {
             <div className="input-container">
                 <input type="text" name="city" id="city-container" className="input-field" value={formData.city} onChange={handleChange} />
                 <label htmlFor="city" className="input-label">
-                    {t("City and province")}
+                    {t("City")}
                 </label>
                 {errors.city && <span className="error-span"> {errors.city} </span>}
             </div>

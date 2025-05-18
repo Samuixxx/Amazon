@@ -1,10 +1,13 @@
 {
-  "otp": {
-    "title": "OTP 验证码",
-    "header": "您的验证码",
-    "body": "请使用以下 OTP 验证码完成在 <strong>ShopHub</strong> 的注册：",
-    "expiry": "此验证码将在 5 分钟后过期。",
-    "security_note": "为了您的安全，请勿将此验证码分享给他人。ShopHub 永远不会通过其他方式向您索取验证码。",
-    "footer": "如果您未请求此验证码，请忽略此邮件。"
-  }
+    "otp": {
+        "title": "OTP 验证码",
+        "header": "您的验证码",
+        "body": "请使用以下 OTP 验证码完成在 <strong>ShopHub</strong> 的注册：",
+        "expiry": "此验证码将在 5 分钟后过期。",
+        "security_note": "为了您的安全，请勿将此验证码分享给他人。ShopHub 永远不会通过其他方式向您索取验证码。",
+        "footer": "如果您未请求此验证码，请忽略此邮件。"
+    },
+    "twilio": {
+        "verification_message": "欢迎来到ShopHub，请在5分钟内输入此代码：{{otp}}"
+    }
 }

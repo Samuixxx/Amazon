@@ -44,6 +44,8 @@
     "City": "城市",
     "Postal code": "邮政编码",
     "Specifications": "特殊要求",
+    "OR": "或",
+    "Sign up with:": "使用以下方式注册：",
     "Name characters must contain only letters": "姓名只能包含字母",
     "Name must be at least 2 letters": "姓名必须至少有两个字母",
     "Surname characters must contain only letters": "姓氏只能包含字母",
@@ -70,7 +72,17 @@
     "I would like to receive promotional emails, exclusive offers, and updates via email or push notifications.": "我希望通过电子邮件或推送通知接收促销邮件、独家优惠和更新。",
     "Choose your verification method": "选择你的验证方式",
     "Sms": "短信",
-    "Authentication app": "身份验证应用",
-    "Complete the registration": "完成注册"
-  }
-  
+    "Phone call": "电话通话",
+    "Sms verification": "短信验证",
+    "Please enter the code you received on your phone to complete registration": "请输入您手机收到的验证码以完成注册",
+    "Confirm your Shophub registration": "确认您的 Shophub 注册",
+    "Email Verification": "电子邮件验证",
+    "We have sent a One-Time Password (OTP) to:": "我们已发送一次性密码（OTP）到：",
+    "Please enter the code you received in your email to complete registration.": "请输入您在电子邮件中收到的验证码以完成注册。",
+    "Didn't receive the code?": "没有收到验证码？",
+    "Resend OTP": "重新发送 OTP",
+    "Verify Code & Complete Registration": "验证代码并完成注册",
+    "The code must be 6 digits.": "验证码必须是6位数字。",
+    "Error verifying the code.": "验证码验证错误。",
+    "Error during registration.": "注册过程中出错。"
+}

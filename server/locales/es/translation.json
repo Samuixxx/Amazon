@@ -6,5 +6,8 @@
     "expiry": "Este código expirará en 5 minutos.",
     "security_note": "Por tu seguridad, no compartas este código con nadie. ShopHub nunca te lo pedirá por otros medios.",
     "footer": "Si no solicitaste este código, puedes ignorar este correo."
+  },
+  "twilio": {
+    "verification_message": "Bienvenido a ShopHub, ingresa este código dentro de los 5 minutos: {{otp}}"
   }
 }

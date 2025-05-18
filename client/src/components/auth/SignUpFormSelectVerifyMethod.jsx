@@ -2,7 +2,7 @@ import './SignUpForm.scss'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faMobileScreen, faLock, faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faMobileScreen, faPhone, faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 const SignUpFormSelectVerifyMethod = ({ onBack, onNext, onChoice }) => {
     const { t } = useTranslation()
@@ -39,9 +39,9 @@ const SignUpFormSelectVerifyMethod = ({ onBack, onNext, onChoice }) => {
                 <span className="method-span"> {t("Email")} </span>
             </div>
 
-            <div className={`input-container verification-method-container ${verificationMethod === "app" ? "selected-method" : ""}`}  onClick={() => handleVerificationMethodSelected("app")}>
-                <FontAwesomeIcon icon={faLock} size='2x' />
-                <span className="method-span"> {t("Authentication app")} </span>
+            <div className={`input-container verification-method-container ${verificationMethod === "call" ? "selected-method" : ""}`}  onClick={() => handleVerificationMethodSelected("call")}>
+                <FontAwesomeIcon icon={faPhone} size='2x' />
+                <span className="method-span"> {t("Phone call")} </span>
             </div>
 
             <button type="submit" className="submit-button">

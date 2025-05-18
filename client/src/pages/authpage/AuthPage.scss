@@ -15,7 +15,8 @@ main.auth-page-main {
     >div.auth-page-bg-container {
         width: 50%;
         height: 100%;
-        @include flex(center, center);
+        @include flex(center, center, column);
+        gap: $gap-sm;
     }
 
     >div.auth-page-bg-container {

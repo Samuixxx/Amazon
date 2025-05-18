@@ -1,23 +1,22 @@
-import './Verifications.scss'
 import { useTranslation } from 'react-i18next'
-import { useState, useEffect, useContext, useRef } from 'react'
+import { useState, useContext, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import api from '../../../axios'
 import { setXrsfToken } from '../../../features/xsrftoken'
+import api from '../../../axios'
 import { setUser } from '../../../features/user'
 import { FormContext } from '../../../context/signup/SignUpContext'
 
-const EmailVerificationForm = () => {
+const SmsVerificationForm = () => {
     const { t } = useTranslation()
-    const [code, setCode] = useState('')
-    const [userClientId, setUserClientId] = useState(null)
-    const [errors, setErrors] = useState()
-    const { formData } = useContext(FormContext)
+    const [ code, setCode ] = useState('')
+    const [ userClientId, setUserClientId ] = useState(null)
+    const [ errors, setErrors ] = useState(null)
     const navigate = useNavigate()
-    const inputContainerRef = useRef(null)
     const dispatch = useDispatch()
+    const inputContainerRef = useRef(null)
     const userXsrfToken = useSelector(state => state.token.XSRFTOKEN)
+    const { formData } = useContext(FormContext)
 
     useEffect(() => {
         const controller = new AbortController()
@@ -32,8 +31,8 @@ const EmailVerificationForm = () => {
                     dispatch(setXrsfToken(xsrfToken))
 
                     try {
-                        const otpResponse = await api.post("/auth/signup/getOtpToEmail",
-                            { mail: formData.email },
+                        const otpResponse = await api.post("/auth/signup/getOtpToSms",
+                            { phoneNumber: formData.prefix + formData.telephone },
                             {
                                 headers: { 'X-XSRF-TOKEN': xsrfToken },
                                 signal
@@ -58,7 +57,7 @@ const EmailVerificationForm = () => {
         return () => {
             controller.abort()
         }
-    }, [dispatch, formData.email])
+    }, [dispatch, formData.prefix, formData.telephone])
 
     const handleInputChange = (index, value) => {
         setCode(prevCode => {
@@ -85,7 +84,7 @@ const EmailVerificationForm = () => {
         }
 
         try {
-            const verifyCodeRequest = await api.post("auth/signup/verifyEmailOtp", { code: code, clientId: userClientId }, {
+            const verifyCodeRequest = await api.post("auth/signup/verifySmsOtp", { code: code, clientId: userClientId }, {
                 headers: {
                     "X-XSRF-TOKEN": userXsrfToken
                 }
@@ -139,11 +138,11 @@ const EmailVerificationForm = () => {
                 {t("Confirm your Shophub registration")}
             </h1>
             <h3 className="verification-form-subtitle">
-                {t("Email Verification")}
+                {t("Sms verification")}
             </h3>
             <span className="verification-form-description">
-                {t("We have sent a One-Time Password (OTP) to:")} <strong>{formData.email}.</strong>
-                {t("Please enter the code you received in your email to complete registration.")}
+                {t("We have sent a One-Time Password (OTP) to:")} <strong>{formData.prefix + formData.telephone}.</strong>
+                {t("Please enter the code you received on your phone to complete registration")}
             </span>
             <div className="verification-form-otp-container" ref={inputContainerRef}>
                 {[...Array(6)].map((_, index) => (
@@ -162,12 +161,12 @@ const EmailVerificationForm = () => {
             <span className="verification-form-otp-again">
                 {t("Didn't receive the code?")} <button type="button" className="resend-button">{t("Resend OTP")}</button>
             </span>
-            {errors && <span className="error-span">{errors}</span>}
+            {errors && <span className="error-span">{t(errors)}</span>}
             <button type="submit" className="submit-button">
-                {t("Verify Code & Complete Registration")}
+                {t("Complete the registration")}
             </button>
         </form>
     )
 }
 
-export default EmailVerificationForm
+export default SmsVerificationForm

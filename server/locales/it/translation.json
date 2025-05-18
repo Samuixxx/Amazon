@@ -1,10 +1,13 @@
 {
-  "otp": {
-    "title": "Codice OTP",
-    "header": "Il tuo codice di verifica",
-    "body": "Usa il codice OTP qui sotto per completare la registrazione su <strong>ShopHub</strong>:",
-    "expiry": "Questo codice scadrà tra 5 minuti.",
-    "security_note": "Per la tua sicurezza, non condividere questo codice con nessuno. ShopHub non ti chiederà mai il codice tramite altri canali.",
-    "footer": "Se non hai richiesto questo codice, puoi ignorare questa email."
-  }
+    "otp": {
+        "title": "Codice OTP",
+        "header": "Il tuo codice di verifica",
+        "body": "Usa il codice OTP qui sotto per completare la registrazione su <strong>ShopHub</strong>:",
+        "expiry": "Questo codice scadrà tra 5 minuti.",
+        "security_note": "Per la tua sicurezza, non condividere questo codice con nessuno. ShopHub non ti chiederà mai il codice tramite altri canali.",
+        "footer": "Se non hai richiesto questo codice, puoi ignorare questa email."
+    },
+    "twilio": {
+        "verification_message": "Benvenuto su ShopHub, inserisci questo codice entro 5 minuti: {{otp}}"
+    }
 }

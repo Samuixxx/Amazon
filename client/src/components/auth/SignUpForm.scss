@@ -14,13 +14,13 @@ form.signup-form {
     @include flex(center, center, column);
     @include box-shadow(0, 0, 10px, 2px, $form-shadow-color);
 
-    > span.signup-go-back-span {
+    >span.signup-go-back-span {
         position: absolute;
         top: 0;
         left: -20%;
         cursor: pointer;
 
-        > svg {
+        >svg {
             color: $form-background-color;
         }
 
@@ -34,21 +34,21 @@ form.signup-form {
 
     }
 
-    > h1.signup-form-title {
+    >h1.signup-form-title {
         color: color.adjust($page-text-color, $lightness: 25%);
         font-family: $font-family;
         font-size: $font-size-xl;
         font-weight: 700;
         margin-bottom: $margin-md;
         text-align: center;
-    }  
+    }
 
-    > div#telephone-container {
+    >div#telephone-container {
         @include grid(center, auto 1fr, auto);
     }
 
 
-    > div.input-container {
+    >div.input-container {
         width: 100%;
         position: relative;
         margin-bottom: $margin-md;
@@ -73,11 +73,11 @@ form.signup-form {
                 cursor: pointer;
             }
 
-            > svg {
+            >svg {
                 color: color.adjust($form-placeholder-color, $lightness: -30%);
             }
 
-            > span.method-span {
+            >span.method-span {
                 font-size: $font-size-md;
                 color: $form-placeholder-color;
                 font-family: $font-family;
@@ -88,7 +88,7 @@ form.signup-form {
         }
 
 
-        > input.input-field {
+        >input.input-field {
             width: 100%;
             background-color: $form-input-background;
             font-family: $font-family;
@@ -106,7 +106,7 @@ form.signup-form {
                 background-color: color.adjust($form-input-background, $lightness: 10%);
             }
 
-            &.filled + label.input-label,
+            &.filled+label.input-label,
             &:focus+label.input-label {
                 top: -28%;
                 left: 2%;
@@ -114,7 +114,7 @@ form.signup-form {
             }
         }
 
-        > textarea.input-field {
+        >textarea.input-field {
             width: 100%;
             resize: none;
             background-color: $form-input-background;
@@ -132,20 +132,20 @@ form.signup-form {
                 background-color: color.adjust($form-input-background, $lightness: 10%);
             }
 
-            &.filled + label.input-label {
+            &.filled+label.input-label {
                 top: -28%;
                 left: 2%;
                 font-size: calc($font-size-md - 0.2rem);
             }
         }
 
-        
 
-        > textarea.input-field + label.input-label {
+
+        >textarea.input-field+label.input-label {
             top: 10%;
         }
 
-        > label.input-label {
+        >label.input-label {
             position: absolute;
             left: 3%;
             top: 25%;
@@ -163,8 +163,8 @@ form.signup-form {
             left: 0;
             top: 0;
             height: 100%;
-            width: auto; 
-            min-width: 100px; 
+            width: auto;
+            min-width: 100px;
         }
 
         button.toggle-password-visibility {
@@ -179,12 +179,12 @@ form.signup-form {
             cursor: pointer;
             @include flex(center, center);
 
-            > svg {
+            >svg {
                 color: color.adjust($form-placeholder-color, $lightness: -15%);
             }
         }
 
-        > span.error-span{
+        >span.error-span {
             color: red;
             font-size: $font-size-sm;
             font-family: $font-family;
@@ -194,7 +194,7 @@ form.signup-form {
         }
     }
 
-    > button.submit-button {
+    >button.submit-button {
         margin-top: $margin-md;
         width: 100%;
         padding-block: calc($padding-md - 0.2rem);
@@ -218,7 +218,7 @@ form.signup-form {
         }
     }
 
-    > span.signup-prompt {
+    >span.signup-prompt {
         font-family: $font-family;
         font-size: 0.95rem;
         font-weight: 400;
@@ -252,9 +252,9 @@ form.signup-form {
 
 form.signup-form#policy-form {
 
-    > div.input-container {
+    >div.input-container {
 
-        > input[type="checkbox"].input-field {
+        >input[type="checkbox"].input-field {
             width: 1.2rem;
             height: 1.2rem;
             appearance: none;
@@ -293,8 +293,8 @@ form.signup-form#policy-form {
                 box-shadow: 0 0 0 2px rgba(240, 136, 4, 0.25);
             }
         }
-                
-        > span.input-span {
+
+        >span.input-span {
             font-family: $font-family;
             font-size: $font-size-md;
             font-weight: 350;
@@ -303,9 +303,77 @@ form.signup-form#policy-form {
         }
     }
 
-    > span.error-span{
-            color: red;
-            font-size: $font-size-sm;
-            font-family: $font-family;
+    >span.error-span {
+        color: red;
+        font-size: $font-size-sm;
+        font-family: $font-family;
+    }
+}
+
+.separator-container {
+    width: 100%;
+    max-width: 400px;
+    @include flex(center, center);
+    gap: $gap-sm;
+    margin-top: $margin-md;
+
+    &::before,
+    &::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background-color: #000000;
+        opacity: 0.3;
+    }
+
+    > span.separator-span {
+        padding: 0 0.5rem;
+        color: $form-placeholder-color;
+        font-size: $font-size-md;
+        font-weight: 400;
+        font-family: $font-family;
+    }
+}
+
+span.social-span {
+    padding: 0 0.5rem;
+    color: $form-placeholder-color;
+    font-size: $font-size-md;
+    font-weight: 350;
+    font-family: $font-family;
+    margin-bottom: $margin-md;
+}
+
+// Social login container
+.social-login-container {
+    width: 100%;
+    max-width: 400px;
+    @include flex(center, space-between);
+    gap: $gap-md;
+
+    >.social-icon {
+        flex: 1;
+        text-align: center;
+        padding: $padding-md $padding-lg;
+        border-radius: 0.5rem;
+        background-color: $form-social-background;
+        color: $form-social-text-color;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: $form-social-hover-background;
+            color: $form-social-hover-text-color;
+            transform: scale(1.05);
         }
+
+        &:focus-visible {
+            outline: 2px solid $form-social-hover-background;
+            outline-offset: 2px;
+        }
+    }
 }

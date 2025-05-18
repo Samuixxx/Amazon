@@ -23,6 +23,7 @@ const { authRouter } = require('./routers/authRouter')
 const helmet = require('helmet')
 const rateLimit = require('express-rate-limit')
 const hpp = require('hpp')
+const crypto = require('node:crypto')
 
 // -------- OTHER MIDDLEWARES --------
 const cookieParser = require('cookie-parser')
@@ -37,6 +38,14 @@ const redisClient = require('./db/redisClient')
 
 // -------- AUTHENTICATION --------
 const passport = require('./config/passport')
+
+// NGROK CONFIG
+app.set('trust proxy', 1)
+
+app.use((req, res, next) => {
+    res.locals.nonce = crypto.randomBytes(16).toString('base64')
+    next()
+})
 
 // -------- TRANSLATIONS ---------
 i18next
@@ -62,7 +71,7 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'"],
+            scriptSrc: ["'self'", (req, res) => `'nonce-${res.locals.nonce}'`],
             styleSrc: ["'self'"],
             imgSrc: ["'self'"],
             fontSrc: ["'self'"],
@@ -114,8 +123,20 @@ app.use(compression())
 app.use(morgan('combined'))
 
 // -------- CROSS-ORIGIN --------
+allowedOrigins = [
+    process.env.CLIENT_ORIGIN_URL,
+    process.env.SERVER_ORIGIN_URL
+]
+
 app.use(cors({
-    origin: process.env.CLIENT_ORIGIN_URL,
+    origin: (origin, callback) => {
+        if(!origin) return callback(null, true);
+        if(allowedOrigins.indexOf(origin) === -1){
+        const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+        return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-XSRF-TOKEN'],

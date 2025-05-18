@@ -101,7 +101,7 @@ const SignInForm = ({ onChange }) => {
                 <span className="switch"></span>
                 <span>{t('Remember me')}</span>
             </label>
-            { errors && <span className="error-span">{errors}</span>}
+            { errors && <span className="error-span">{errors.message}</span>}
             <button type="submit" className="submit-button">{t('Sign in')}</button>
             <div className="social-login-container">
                 <span className="social-icon">

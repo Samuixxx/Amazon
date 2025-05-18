@@ -36,7 +36,7 @@ const FormStepOne = ({ onNext, onChange }) => {
 
     const handleProceed = (e) => {
         e.preventDefault()
-        const validation = validateStepOne(formData, t)
+        const validation = validateStepOne(formData)
         setErrors(validation)
         if (!Object.keys(validation).length) onNext()
     }
@@ -54,7 +54,7 @@ const FormStepOne = ({ onNext, onChange }) => {
     }, [formData])
 
     return (
-        <form className="signup-form" ref={formRef}>
+        <form className="signup-form" ref={formRef} onSubmit={handleProceed}>
             <h1 className="signup-form-title">
                 {t("Create your account")}
             </h1>
@@ -107,7 +107,7 @@ const FormStepOne = ({ onNext, onChange }) => {
                 </button>
                 {errors.cpsw && <span className="error-span">{errors.confirmpassword}</span>}
             </div>
-            <button type="submit" className="submit-button" onClick={handleProceed}>
+            <button type="submit" className="submit-button">
                 {t("Proceed")}
             </button>
             <span className="signup-prompt">
