@@ -1,8 +1,9 @@
 @use 'sass:math' as math;
+@use 'sass:color' as color;
 @use '../../styles/index' as *;
 
 header.homepage_header {
-    background-color: scale-color($header-background-color, $lightness: 10%);
+    background-color: color.adjust($header-background-color, $lightness: 10%);
     padding: $padding-sm;
     display: flex;
     align-items: center;

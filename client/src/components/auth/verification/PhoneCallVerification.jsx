@@ -9,9 +9,9 @@ import { FormContext } from '../../../context/signup/SignUpContext'
 
 const PhoneCallVerificationForm = () => {
     const { t } = useTranslation()
-    const [ code, setCode ] = useState('')
-    const [ userClientId, setUserClientId ] = useState(null)
-    const [ errors, setErrors ] = useState(null)
+    const [code, setCode] = useState('')
+    const [userClientId, setUserClientId] = useState(null)
+    const [errors, setErrors] = useState(null)
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const inputContainerRef = useRef(null)
@@ -128,7 +128,8 @@ const PhoneCallVerificationForm = () => {
                 navigate(registerData.route)
             }
         } catch (error) {
-            setErrors(error.message)
+            const message = error?.response?.data?.message || error.message || "Errore imprevisto"
+            setErrors(message)
         }
     }
 

@@ -45,11 +45,11 @@ const EmailVerificationForm = () => {
                             setUserClientId(clientId)
                         }
                     } catch (otpError) {
-                        if (!signal.aborted) setErrors(otpError)
+                        if (!signal.aborted) setErrors(otpError?.response?.data?.message || otpError.message || "Errore sconosciuto.")
                     }
                 }
             } catch (tokenError) {
-                if (!signal.aborted) setErrors(tokenError)
+                if (!signal.aborted) setErrors(tokenError?.response?.data?.message || tokenError.message || "Errore sconosciuto.")
             }
         }
 
@@ -73,6 +73,23 @@ const EmailVerificationForm = () => {
             inputs[index + 1]?.focus()
         } else if (value.length === 0 && index > 0) {
             inputs[index - 1]?.focus()
+        }
+    }
+
+    const handleResendOtp = async () => {
+        try {
+            const response = await api.post("/auth/signup/getOtpToEmail", {
+                mail: formData.email
+            }, {
+                headers: { 'X-XSRF-TOKEN': userXsrfToken }
+            })
+            if (!response.data.ok) {
+                setErrors(response.data.message)
+            } else {
+                setUserClientId(response.data.clientId)
+            }
+        } catch (err) {
+            setErrors("Errore durante il reinvio del codice.")
         }
     }
 
@@ -129,7 +146,8 @@ const EmailVerificationForm = () => {
                 navigate(registerData.route)
             }
         } catch (error) {
-            setErrors(error.message)
+            const message = error?.response?.data?.message || error.message || "Errore imprevisto"
+            setErrors(message)
         }
     }
 
@@ -160,9 +178,9 @@ const EmailVerificationForm = () => {
                 ))}
             </div>
             <span className="verification-form-otp-again">
-                {t("Didn't receive the code?")} <button type="button" className="resend-button">{t("Resend OTP")}</button>
+                {t("Didn't receive the code?")} <button type="button" className="resend-button" onClick={handleResendOtp}>{t("Resend OTP")}</button>
             </span>
-            {errors && <span className="error-span">{errors}</span>}
+            {errors && <span className="error-span">{typeof errors === 'string' ? errors : JSON.stringify(errors)}</span>}
             <button type="submit" className="submit-button">
                 {t("Verify Code & Complete Registration")}
             </button>

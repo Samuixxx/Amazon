@@ -1,13 +1,13 @@
+import './SignUpGoogle.scss'
 import { useTranslation } from "react-i18next"
 import Select from 'react-select'
-import { FormContext } from '../../context/signup/SignUpContext'
+import { FormContext } from '../../../../context/signup/SignUpContext'
 import { useContext, useEffect, useState, useRef } from "react"
 import { customStyles, getStates, validateStepTwo } from '.'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
-
-const FormStepTwo = ({ onNext, onBack, onChange }) => {
+const SignUpGoogleStepTwo = ({ onNext, onBack }) => {
     const { t, i18n } = useTranslation()
     const { formData, setFormData } = useContext(FormContext)
     const [allCountries, setAllCountries] = useState([])
@@ -32,7 +32,7 @@ const FormStepTwo = ({ onNext, onBack, onChange }) => {
         setFormData((prev) => ({ ...prev, country: selectedOption.value }))
     }
 
-    const handleProceed = async (e) => {
+    const handleProceed = async(e) => {
         e.preventDefault()
         const validation = await validateStepTwo(formData, setFormData)
         setErrors(validation)
@@ -110,14 +110,8 @@ const FormStepTwo = ({ onNext, onBack, onChange }) => {
             <button type="submit" className="submit-button">
                 {t("Proceed")}
             </button>
-            <span className="signup-prompt">
-                {t("Already have an account?")}
-                <strong onClick={onChange}>
-                    {t("Sign in")}
-                </strong>
-            </span>
         </form>
     )
 }
 
-export default FormStepTwo
+export default SignUpGoogleStepTwo

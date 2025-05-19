@@ -1,66 +1,68 @@
 @use 'sass:math' as math;
+@use 'sass:color';
 @use '../../styles/index' as *;
 
-header > nav.homepage_nav > section.lang_container{
-    position: relative;
-    @include flex();
-    gap: $gap-sm;
+header > nav.homepage_nav > section.lang_container {
+  position: relative;
+  @include flex();
+  gap: $gap-sm;
 }
 
-section.lang_container > button.lang_button{
-    font-size: $font-size-xl;
-    background-color: transparent;
-    @include border(1px, scale-color($header-border-color, $lightness: 5%), $border-radius-circled);
-    @include flex();
-    @include transition(all 0.4s ease-in-out);
+section.lang_container > button.lang_button {
+  font-size: $font-size-xl;
+  background-color: transparent;
+  @include border(1px, color.adjust($header-border-color, $lightness: 5%), $border-radius-circled);
 
-    &:hover{
-        background-color: scale-color($header-border-color, $lightness: -10%);
-        color: $header-text-color;
-        cursor: pointer;
-        outline: none;
-    }
-}
+  @include flex();
+  @include transition(all 0.4s ease-in-out);
 
-button.lang_button > img.lang_flag{
-    width: 2rem;
-    height: 2rem;
-    object-fit: fill;
-    border-radius: $border-radius-circled;
-}
-
-section.lang_container > span.lang_span{
-    width: 3.5rem;
-    font-size: $font-size-md;
-    font-weight: bold;
-    text-align: center;
-    font-family: $font-family;
+  &:hover {
+    background-color: color.adjust($header-border-color, $lightness: -10%);
     color: $header-text-color;
+    cursor: pointer;
+    outline: none;
+  }
+}
+
+button.lang_button > img.lang_flag {
+  width: 2rem;
+  height: 2rem;
+  object-fit: fill;
+  border-radius: $border-radius-circled;
+}
+
+section.lang_container > span.lang_span {
+  width: 3.5rem;
+  font-size: $font-size-md;
+  font-weight: bold;
+  text-align: center;
+  font-family: $font-family;
+  color: $header-text-color;
 }
 
 ul.lang_options {
-    position: absolute;
-    top: 90%;
-    left: -25%;
-    background-color: $background-medium;
-    list-style: none;
-    display: none; // gestito da gsap
-    padding: 0;
-    opacity: 0;
-    z-index: 100;
-    @include box-shadow(0 0 4px 0 rgba(0, 0, 0, 0.1));
+  position: absolute;
+  top: 90%;
+  left: -25%;
+  background-color: $background-medium;
+  list-style: none;
+  display: none; // gestito da gsap
+  padding: 0;
+  opacity: 0;
+  z-index: 100;
+  @include box-shadow(0 0 4px 0 rgba(0, 0, 0, 0.1));
 }
 
 ul > li.lang_option {
-    padding: $padding-sm;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    text-wrap: nowrap;
-    font-size: $font-size-sm;
-    font-family: $font-family;
-    color: $header-text-color;
+  padding: $padding-sm;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-wrap: nowrap;
+  font-size: $font-size-sm;
+  font-family: $font-family;
+  color: $header-text-color;
 
-    &:hover {
-        background-color: $header-hover-color;
-    }
+  &:hover {
+    background-color: $header-hover-color;
+  }
 }

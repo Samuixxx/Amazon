@@ -95,6 +95,10 @@ form.signup-form {
                 background-color: color.adjust($form-input-background, $lightness: 10%);
             }
 
+            &#telephone-container + label.input-label {
+                left: 30% !important;
+            }
+
             &.filled+label.input-label,
             &:focus+label.input-label {
                 top: -28%;

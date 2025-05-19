@@ -12,8 +12,11 @@ const SIGNUP_USER_QUERY = `
 
 const SESSION_DESERIALIZE_USER_QUERY = `SELECT * FROM USERS WHERE id = $1`
 
-const SIGNIN_USER_QUERY = `SELECT id, password, name, email, country, cookiesaccepted FROM USERS WHERE email LIKE $1`
+const SIGNIN_USER_QUERY = `SELECT id, password, name, email, country, cookiesaccepted FROM USERS WHERE email = $1`
 
-const SEARCH_USER_GOOGLE = 'SELECT id, name, email, country, cookiesaccepted FROM USERS WHERE google_id LIKE $1'
+const SEARCH_USER_GOOGLE = 'SELECT id, name, email, country, cookiesaccepted FROM USERS WHERE google_id = $1'
 
-module.exports = { SIGNUP_USER_QUERY, SESSION_DESERIALIZE_USER_QUERY, SIGNIN_USER_QUERY, SEARCH_USER_GOOGLE }
+const FIND_USER_BY_TELEPHONE = 'SELECT id FROM USERS WHERE telephone = $1'
+const FIND_USER_BY_EMAIL = 'SELECT id FROM USERS WHERE email = $1'
+
+module.exports = { SIGNUP_USER_QUERY, SESSION_DESERIALIZE_USER_QUERY, SIGNIN_USER_QUERY, SEARCH_USER_GOOGLE, FIND_USER_BY_TELEPHONE, FIND_USER_BY_EMAIL }

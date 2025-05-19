@@ -3,7 +3,7 @@ const redis = require('../db/redisClient')
 const bcrypt = require('bcryptjs')
 const passport = require('../config/passport')
 const jwt = require('jsonwebtoken')
-const { SIGNUP_USER_QUERY } = require('../queries/auth')
+const { SIGNUP_USER_QUERY, FIND_USER_BY_TELEPHONE } = require('../queries/auth')
 const { generateTokens } = require('../tokens/generateTokens')
 const { generateOtp } = require('../utils/otp')
 const { v4: uuidv4 } = require('uuid')
@@ -144,10 +144,10 @@ const signInUser = (req, res, next) => {
                 ok: true,
                 route: "/",
                 user: {
-                    name,
-                    email,
-                    country,
-                    cookiesAccepted: cookiesaccepted
+                    userDisplayName: name,
+                    userEmail: email,
+                    userCountry: country,
+                    userCookiesAccepted: cookiesaccepted
                 }
             })
         })
@@ -259,7 +259,7 @@ const getOTPFromCall = async (req, res) => {
 }
 
 const verifyCallOtp = async (req, res) => {
-    const {code, clientId } = req.body
+    const { code, clientId } = req.body
     const clientAttemptsKey = `otp:call:attempts:${clientId}`
     const attempts = await redis.get(clientAttemptsKey)
     if (!attempts) {
@@ -284,7 +284,7 @@ const verifyCallOtp = async (req, res) => {
     res.json({ ok: true })
 }
 
-const getDisplayName = async (req, res) => {
+const getUserSocialSignUpInfo = async (req, res) => {
     const { method } = req.params
 
     const mapper = {
@@ -305,16 +305,25 @@ const getDisplayName = async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        const userDisplayName = decoded.userDisplayName || decoded.payload?.userDisplayName
+        const userSocialID = decoded.id || decoded.payload?.id
 
-        if (!userDisplayName) {
+        if (!userSocialID) {
             return res.status(400).json({
                 ok: false,
-                message: i18next.t("No display name found for given token")
+                message: i18next.t("No id found")
             })
         }
+        try {
+            const profile = await redis.get(`tempuser:google:${userSocialID}`)
+            if (!profile) {
+                return res.status(401).json({ ok: false, message: i18next.t("No profile found for given id") })
+            }
 
-        return res.json({ ok: true, userDisplayName })
+            return res.json({ ok: true, profile: JSON.parse(profile) })
+        } catch (redisError) {
+            res.status(500).json({ ok: false, message: i18next.t("Redis error") })
+        }
+
     } catch (err) {
         return res.status(403).json({
             ok: false,
@@ -323,4 +332,21 @@ const getDisplayName = async (req, res) => {
     }
 }
 
-module.exports = { signInUser, signUpNewUser, getOTPFromEmail, verifyEmailOtp, getOTPFromMessage, verifySmsOtp, getOTPFromCall, verifyCallOtp, getDisplayName }
+const isPhoneNumberAlreadyUsed = async (req, res) => {
+    const { phone } = req.body
+
+    try {
+        const result = await pool.query(FIND_USER_BY_TELEPHONE, [phone])
+        const isAlreadyUsed = result.rows.length > 0
+        if (isAlreadyUsed) {
+            return res.status(400).json({ ok: false, message: i18next.t("This phone number is already used by another user") })
+        }
+
+        return res.json({ ok: true })
+    } catch (error) {
+        console.error("Error checking the phone number", error)
+        res.status(500).json({ ok: false, message: i18next.t("Error in the number verification process") })
+    }
+}
+
+module.exports = { signInUser, signUpNewUser, getOTPFromEmail, verifyEmailOtp, getOTPFromMessage, verifySmsOtp, getOTPFromCall, verifyCallOtp, getUserSocialSignUpInfo, isPhoneNumberAlreadyUsed }

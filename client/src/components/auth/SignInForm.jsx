@@ -8,12 +8,14 @@ import { useNavigate } from 'react-router-dom'
 import api from '../../axios'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGoogle, faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons"
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { handleSignInSubmit } from '.'
 
 const SignInForm = ({ onChange }) => {
     const { t } = useTranslation()
     const [formData, setFormData] = useState({ email: '', password: '' })
     const [ errors, setErrors ] = useState(null)
+    const [ isPasswordVisible, setIsPasswordVisible ] = useState(null)
     const navigate = useNavigate()
     const userXsrfToken = useSelector(state => state.token.XSRFTOKEN)
     const dispatch = useDispatch()
@@ -83,7 +85,7 @@ const SignInForm = ({ onChange }) => {
             </div>
             <div className="input-container">
                 <input
-                    type="password"
+                    type={isPasswordVisible ? "text" : "password"}
                     name="password"
                     className="input-field"
                     id="password-container"
@@ -94,6 +96,9 @@ const SignInForm = ({ onChange }) => {
                 <label htmlFor="password-container" className="input-label">
                     {t('Password')}
                 </label>
+                <button className="toggle-password-visibility" type="button" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
+                    <FontAwesomeIcon icon={isPasswordVisible ? faEye : faEyeSlash} size="xl" />
+                </button>
             </div>
             <span className="forgot-password-link">{t('Forgot password')}</span>
             <label className="remember-me-container" htmlFor="remember-me-input">

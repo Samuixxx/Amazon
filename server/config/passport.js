@@ -3,9 +3,9 @@ const LocalStrategy = require('passport-local').Strategy
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const pool = require('../db')
 const bcrypt = require('bcryptjs')
-const { SESSION_DESERIALIZE_USER_QUERY: deserializeQuery, SIGNIN_USER_QUERY: loginQuery, SEARCH_USER_GOOGLE: searchUserWithGoogleId } = require('../queries/auth')
+const { SESSION_DESERIALIZE_USER_QUERY: deserializeQuery, SIGNIN_USER_QUERY: loginQuery, SEARCH_USER_GOOGLE: searchUserWithGoogleId, FIND_USER_BY_EMAIL } = require('../queries/auth')
 const redis = require('../db/redisClient')
-const { generateTokens } = require('../tokens/generateTokens')
+const i18next = require('i18next')
 
 passport.serializeUser((user, done) => {
     done(null, user.id)
@@ -62,36 +62,37 @@ passport.use(new GoogleStrategy({
     const state = req.query.state
 
     try {
-        const result = await pool.query(searchUserWithGoogleId, [profile.id]); 
+        const result = await pool.query(searchUserWithGoogleId, [profile.id]);
         const user = result.rows[0]
 
         if (state === 'signup') {
+            const email = profile.emails?.[0]?.value
+            if (!email) return done(null, false, { message: i18next.t("No email given by google") })
+
+            const result = await pool.query(FIND_USER_BY_EMAIL, [email])
+            if (result.rows.length > 0)
+                return done(null, false, { ok: false, message: i18next.t("This email is already used by another account") })
+
             if (!user) {
                 const tempUser = {
-                    googleId: profile.id,
-                    email: (profile.emails && profile.emails.length > 0) ? profile.emails[0].value : null,
-                    name: profile.givenName,
-                    surname: profile.familyName
-
-                }
-
-                if (!tempUser.email) {
-                    return done(null, false, { message: 'Nessun indirizzo email fornito da Google.', tempUserId: profile.id, name: profile.givenName })
+                    userId: profile.id,
+                    userEmail: email,
+                    userDisplayName: profile.name.givenName,
+                    userFamilyName: profile.name.familyName
                 }
 
                 try {
-                    await redis.set(`tempuser:google:${profile.id}`, JSON.stringify(tempUser), 'EX', 1800)
-                } catch (redisError) {
-                    return done(redisError, false)
+                    await redis.set(`tempuser:google:${profile.id}`, JSON.stringify(tempUser), 'EX', 600, 'NX')
+                } catch (err) {
+                    return done(err, false)
                 }
 
-                return done(null, false, { ok: true, message: 'Utente temporaneo creato. Completa la registrazione.', tempUserId: profile.id })
+                return done(null, false, { ok: true, message: i18next.t("Temporary user created. Complete registration."), id: profile.id })
             } else {
-                return done(null, false, { message: 'Un account è già associato a questo indirizzo Google.' })
+                return done(null, false, { message: i18next.t("An account is already associated with this Google address.") })
             }
-        }
-
-        if (state === 'signin') {
+        } 
+        else if (state === 'signin') {
             if (!user) {
                 // Nessun utente trovato con questo Google ID
                 return done(null, false, { ok: true, message: 'Nessun account utente collegato a questo account Google.' });

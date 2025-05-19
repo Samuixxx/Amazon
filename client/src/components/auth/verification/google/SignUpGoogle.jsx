@@ -1,63 +1,43 @@
-import { useState, useEffect } from 'react'
-import SignUpGoogleStepOne from './SignUpGoogleStepOne'
+import { useState} from 'react'
 import { FormProvider } from '../../../../context/signup/SignUpContext'
-import { useDispatch } from 'react-redux'
-import api from '../../../../axios'
-import i18n from '../../../../i18n'
-import { toast } from 'react-toastify'
-import { setDisplayName } from '../../../../features/user'
+import SignUpGoogleStepTwo from './SignUpGoogleStepTwo'
+import SignUpGoogleStepThree from './SignUpGoogleStepThree'
+import SignUpGoogleStepOne from './SignUpGoogleStepOne'
+import SignUpFormSelectVerifyMethod from '../../SignUpFormSelectVerifyMethod'
+import EmailVerificationForm from '../EmailVerificationForm'
+import SmsVerificationForm from "../SmsVerificationForm"
+import PhoneCallVerificationForm from "../PhoneCallVerification"
 
 const SignUpGoogle = () => {
     const [step, setStep] = useState(1)
-    const dispatch = useDispatch()
+    const [verificationMethod, setVerificationMethod] = useState(null)
+    const validVerificationMethods = new Set(["email", "sms", "call"])
 
     const handleNext = () => {
         setStep(step => step + 1)
     }
 
-    const notifySuccess = (name) => toast.success(`${i18n.t("Benvenuto")}${name}`, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        pauseOnHover: false,
-        draggable: false
-    })
-
-    const notifyError = (error) => {
-        toast.error(error, {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            pauseOnHover: false,
-            draggable: false
-        })
+    const handleBack = () => {
+        setStep(step => step - 1)
     }
 
-    useEffect(() => {
-        const getDisplayName = async () => {
-            try {
-                const request = await api.get('auth/user/getDisplayName/google')
-                const response = request.data
-
-                if (response.ok) {
-                    dispatch(setDisplayName(response.userDisplayName))
-                    notifySuccess(response.userDisplayName)
-                } else if (response.message) {
-                    notifyError(response.message)
-                }
-            } catch (error) {
-                notifyError(error.response?.data?.message || i18n.t("Unexpected error"))
-            }
+    const handleVerificationMethodChoice = (method) => {
+        if (!validVerificationMethods.has(method)) {
+            return
         }
-
-        getDisplayName()
-    }, [dispatch])
-
+        setVerificationMethod(method)
+    }
 
     return (
         <FormProvider>
             <main className="container">
                 {step === 1 && <SignUpGoogleStepOne onNext={handleNext} />}
+                {step === 2 && <SignUpGoogleStepTwo onNext={handleNext} onBack={handleBack} />}
+                {step === 3 && <SignUpGoogleStepThree onNext={handleNext} onBack={handleBack} />}
+                {step === 4 && <SignUpFormSelectVerifyMethod onNext={handleNext} onBack={handleBack} onChoice={handleVerificationMethodChoice} />}
+                {step === 5 && verificationMethod === "email" && <EmailVerificationForm />}
+                {step === 5 && verificationMethod === "sms" && <SmsVerificationForm />}
+                {step === 5 && verificationMethod === "call" && <PhoneCallVerificationForm />}
             </main>
         </FormProvider>
     )

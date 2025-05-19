@@ -1,11 +1,11 @@
-import './SignUpForm.scss'
+import './SignUpGoogle'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from "react-i18next"
-import { FormContext } from '../../context/signup/SignUpContext'
+import { FormContext } from '../../../../context/signup/SignUpContext'
 import { useContext, useState, useEffect, useRef } from 'react'
 
-const FormStepThree = ({ onBack, onNext }) => {
+const SignUpGoogleStepThree = ({ onBack, onNext }) => {
     const { t } = useTranslation()
     const { formData, setFormData } = useContext(FormContext)
     const [errors, setErrors] = useState(null)
@@ -89,4 +89,4 @@ const FormStepThree = ({ onBack, onNext }) => {
     )
 }
 
-export default FormStepThree
+export default SignUpGoogleStepThree

@@ -63,6 +63,23 @@ form.signin-form {
             background: transparent;
             @include transition(all 0.3s ease);
         }
+
+        > button.toggle-password-visibility {
+            height: 100%;
+            position: absolute;
+            left: 87%;
+            right: 0;
+            top: 0;
+            background-color: color.adjust($form-input-background, $lightness: -50%);
+            border: none;
+            outline: none;
+            cursor: pointer;
+            @include flex(center, center);
+
+            >svg {
+                color: color.adjust($form-placeholder-color, $lightness: -15%);
+            }
+        }
     }
 
     > span.forgot-password-link {

@@ -4,26 +4,34 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     isAuthenticated: false,
-    user: null,
+    user: {},
     accessTimestamp: null,
     socialSignUpId: null
   },
   reducers: {
     setUser(state, action) {
+      const payload = typeof action.payload === 'string'
+        ? JSON.parse(action.payload)
+        : action.payload
+
+      state.userDisplayName = payload.userDisplayName
+      state.userEmail = payload.userEmail
       state.isAuthenticated = true
-      state.user = action.payload
-      state.accessTimestamp = Date.now() 
+      state.accessTimestamp = Date.now()
     },
     setDisplayName(state, action) {
-        state.user.displayName = action.payload
+      if (!state.user) {
+        state.user = {}
+      }
+      state.user.userDisplayName = action.payload
     },
     logout(state) {
       state.isAuthenticated = false
-      state.user = null
+      state.user = {}
       state.accessTimestamp = null
     },
     setSocialSignUpId(state, action) {
-        state.socialSignUpId = action.payload
+      state.socialSignUpId = action.payload
     }
   }
 })

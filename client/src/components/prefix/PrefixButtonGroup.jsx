@@ -1,12 +1,13 @@
 import './PrefixButtonGroup.scss'
 import Dropdown from 'react-bootstrap/Dropdown'
 import { countryDialingCodes } from '../../utils/prefixes'
+import i18n from '../../i18n'
 
 const PrefixButtonGroup = ({ selected, onSelect }) => {
     return(
         <Dropdown className="prefix-dropdown" onSelect={onSelect}>
             <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                {selected ? selected : 'Prefix'}
+                {selected ? selected : i18n.t("Prefix")}
             </Dropdown.Toggle>
 
             <Dropdown.Menu className="prefix-menu"> 

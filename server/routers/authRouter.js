@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { body, param, validationResult } = require('express-validator')
+const { body, param } = require('express-validator')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const i18next = require('i18next')
@@ -7,10 +7,11 @@ const { sanitizeBody } = require('../middleware/sanitizeBody')
 const validateBody = require('../middleware/validateBody')
 const { signUpSchema } = require('../schemas/signUpSchema')
 const { signInSchema } = require('../schemas/signInSchema')
-const { signInUser, signUpNewUser, getOTPFromEmail, verifyEmailOtp, getOTPFromMessage, verifySmsOtp, getOTPFromCall, verifyCallOtp, getDisplayName } = require('../controllers/authController')
+const { signInUser, signUpNewUser, getOTPFromEmail, verifyEmailOtp, getOTPFromMessage, verifySmsOtp, getOTPFromCall, verifyCallOtp, getUserSocialSignUpInfo, isPhoneNumberAlreadyUsed } = require('../controllers/authController')
 const { verifyXSRFToken } = require('../controllers/apiController')
 const validateOrigin = require('../middleware/validateOrigin')
 const validateRequest = require('../middleware/validateRequest')
+const validateUuid = require('../middleware/validateUuid')
 
 
 const authRouter = Router()
@@ -41,10 +42,9 @@ authRouter.post(
     body('clientId')
         .isString()
         .withMessage('L\'ID cliente deve essere una stringa.')
-        .isAlphanumeric()
-        .withMessage('L\'ID cliente deve contenere solo lettere e numeri.')
         .escape(),
     validateRequest,
+    validateUuid,
     sanitizeBody,
     validateOrigin,
     verifyXSRFToken,
@@ -75,10 +75,9 @@ authRouter.post(
     body('clientId')
         .isString()
         .withMessage('L\'ID cliente deve essere una stringa.')
-        .isAlphanumeric()
-        .withMessage('L\'ID cliente deve contenere solo lettere e numeri.')
         .escape(),
     validateRequest,
+    validateUuid,
     sanitizeBody,
     validateOrigin,
     verifyXSRFToken,
@@ -109,10 +108,9 @@ authRouter.post(
     body('clientId')
         .isString()
         .withMessage('L\'ID cliente deve essere una stringa.')
-        .isAlphanumeric()
-        .withMessage('L\'ID cliente deve contenere solo lettere e numeri.')
         .escape(),
     validateRequest,
+    validateUuid,
     sanitizeBody,
     validateOrigin,
     verifyXSRFToken,
@@ -121,14 +119,28 @@ authRouter.post(
 
 // AUTH UTILS
 authRouter.get(
-    "/user/getDisplayName/:method",
+    "/user/getUserSocialInfo/:method",
     validateOrigin,
     param('method')
         .isIn(['google', 'facebook', 'microsoft'])
         .withMessage(() => i18next.t('Sign up method not allowed'))
         .escape(),
     validateRequest,
-    getDisplayName
+    getUserSocialSignUpInfo
+)
+
+authRouter.post(
+    "/phonenumber/isUsed",
+    body('phone')
+        .matches(/^\+?[0-9]+$/)
+        .withMessage(i18next.t("Phone number can contain only '+' and numbers"))
+        .trim()
+        .escape(),
+    validateRequest,
+    validateOrigin,
+    verifyXSRFToken,
+    sanitizeBody,
+    isPhoneNumberAlreadyUsed
 )
 
 // PASSPORT AUTH ENDPOINTS
@@ -154,17 +166,16 @@ authRouter.get(
 authRouter.get(
     "/google/callback",
     (req, res, next) => {
-        passport.authenticate('google', { session: false }, (err, user, info) => {
+        passport.authenticate('google', { failureRedirect: '/login' }, (err, user, info) => {
             if (err) {
-                console.error('Errore Google:', err)
-                return res.redirect(`${process.env.CLIENT_ORIGIN_URL}/login?error=${encodeURIComponent('Errore durante l\'autenticazione')}`)
+                return res.redirect(`${process.env.CLIENT_ORIGIN_URL}/auth?error=${encodeURIComponent('Errore durante l\'autenticazione')}`)
             }
 
-            const { tempUserId, name, message } = info || {}
-
-            if (tempUserId) {
+            const { message, id } = info || {}
+            
+            if (id) {
                 const token = jwt.sign(
-                    { tempUserId, userDisplayName: name },
+                    { id },
                     process.env.JWT_SECRET,
                     {
                         expiresIn: '30m'
@@ -180,8 +191,7 @@ authRouter.get(
 
                 return res.redirect(`${process.env.CLIENT_ORIGIN_URL}/finishRegistrationWithGoogle`)
             } else {
-                console.log('❌ Redirecting to login with error:', message)
-                return res.redirect(`${process.env.CLIENT_ORIGIN_URL}/login?error=${encodeURIComponent(message || 'Errore')}`)
+                return res.redirect(`${process.env.CLIENT_ORIGIN_URL}/auth?error=${encodeURIComponent(message || 'Errore')}`)
             }
         })(req, res, next)
     }

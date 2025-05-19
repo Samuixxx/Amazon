@@ -26,6 +26,11 @@ export const FormProvider = ({ children }) => {
             privacy: false,
             cookies: false,
             marketing: false
+        },
+        socialSignUp: {
+            googleid: '',
+            facebookid: '',
+            microsoftid: ''
         }
     });
 

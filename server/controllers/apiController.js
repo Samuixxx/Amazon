@@ -128,7 +128,7 @@ const getXSRFToken = async (req, res) => {
         await redis.set(redisKey, xsrfToken, 'EX', 3600)
         res.cookie('tpmcid', tempId, {
             secure: process.env.NODE_ENV === "production",
-            sameSite: 'None',
+            sameSite: 'none',
             httpOnly: true,
             maxAge: 3600 * 1000
         })
