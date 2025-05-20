@@ -110,7 +110,8 @@ const PhoneCallVerificationForm = () => {
                 postalcode: formData.postalcode,
                 specifications: formData.specifications,
                 coordinates: formData.coordinates,
-                termsconfirm: formData.termsconfirm
+                termsconfirm: formData.termsconfirm,
+                socialSignUp: formData.socialSignUp
             }
 
             const registerRequest = await api.post("auth/signup", reqBody, {

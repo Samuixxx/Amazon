@@ -1,0 +1,13 @@
+@use 'sass:math' as math;
+@use 'sass:color' as color;
+@use '../../../styles/index' as *;
+
+aside.main-page-sidebar{
+    min-width: 240px;
+    height: 100%;
+    background-color: $header-background-color;
+    position: absolute;
+    left: 0;
+    top: 0; 
+    @include flex(start, center, column);
+}

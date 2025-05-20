@@ -13,12 +13,14 @@
  */
 import PageHeader from '../../components/pageheader/PageHeader'
 import CategoriesNavbar from '../../components/categories/CategoriesNavbar'
+import MainPage from '../../components/mainpage/MainPage'
 
 function Home(){
     return (
         <>
             <PageHeader />
             <CategoriesNavbar /> 
+            <MainPage />
         </>
     )
 }

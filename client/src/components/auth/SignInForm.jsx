@@ -44,6 +44,10 @@ const SignInForm = ({ onChange }) => {
         }
     }, [dispatch])
 
+    const handleGoogleSignIn = async () => {
+        window.location.href = `${process.env.REACT_APP_API_URL}/auth/signin/google`
+    }
+
     const handleChange = ({ currentTarget }) => {
         const { name, value, classList } = currentTarget
         setFormData(prevState => ({
@@ -109,7 +113,7 @@ const SignInForm = ({ onChange }) => {
             { errors && <span className="error-span">{errors.message}</span>}
             <button type="submit" className="submit-button">{t('Sign in')}</button>
             <div className="social-login-container">
-                <span className="social-icon">
+                <span className="social-icon" onClick={handleGoogleSignIn}>
                     <FontAwesomeIcon icon={faGoogle} size="lg" />
                 </span>
                 <span className="social-icon">

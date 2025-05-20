@@ -171,9 +171,9 @@ authRouter.get(
                 return res.redirect(`${process.env.CLIENT_ORIGIN_URL}/auth?error=${encodeURIComponent('Errore durante l\'autenticazione')}`)
             }
 
-            const { message, id } = info || {}
+            const { message, id, state } = info || {}
             
-            if (id) {
+            if (state === 'signup' && id) {
                 const token = jwt.sign(
                     { id },
                     process.env.JWT_SECRET,
@@ -190,8 +190,22 @@ authRouter.get(
                 })
 
                 return res.redirect(`${process.env.CLIENT_ORIGIN_URL}/finishRegistrationWithGoogle`)
-            } else {
-                return res.redirect(`${process.env.CLIENT_ORIGIN_URL}/auth?error=${encodeURIComponent(message || 'Errore')}`)
+            } else if (state === 'signin' && user) {
+                const token = jwt.sign(
+                    { id },
+                    process.env.JWT_SECRET,
+                    {
+                        expiresIn: '30m'
+                    }
+                )
+
+                res.cookie('ur_pf_tk', token, {
+                    sameSite: 'none',
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    maxAge: 60 * 30 * 1000
+                })
+                return res.redirect(`${process.env.CLIENT_ORIGIN_URL}/`)
             }
         })(req, res, next)
     }

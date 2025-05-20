@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import PrefixButtonGroup from '../../../prefix/PrefixButtonGroup'
 import { validateStepOne } from '.'
-import { setUser, setSocialSignUpId } from '../../../../features/user'
+import { setUser, setSocialSignUp } from '../../../../features/user'
 import { setXrsfToken } from '../../../../features/xsrftoken'
 import notifyError from '../../../../utils/notifications'
 
@@ -52,7 +52,7 @@ const SignUpGoogleStepOne = ({ onNext }) => {
                 if (response.ok) {
                     const { userId, userEmail, userDisplayName, userFamilyName } = response?.profile
 
-                    dispatch(setSocialSignUpId(userId))
+                    dispatch(setSocialSignUp())
                     dispatch(setUser({ userDisplayName, userFamilyName, userEmail }))
 
                     setFormData(prev => ({

@@ -24,9 +24,11 @@ const ProfileMenu = () => {
     const userAuthenticated = useSelector(state => state.user.isAuthenticated)
 
     return (
-        <section className="profile_menu_container" onClick={ () => !userAuthenticated && navigate("/auth") }>
+        <section className="profile_menu_container" onClick={() => !userAuthenticated && navigate("/auth")}>
             <h2 className="profile_menu_ref">
-                {t(`Welcome, ${userFirstName || 'Sign in'}`)}
+                {userFirstName
+                    ? t('Welcome, {{name}}', { name: userFirstName })
+                    : t('Sign in')}
             </h2>
         </section>
     )

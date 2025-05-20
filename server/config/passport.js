@@ -59,8 +59,9 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true,
     callbackURL: `${process.env.SERVER_ORIGIN_URL}/auth/google/callback`
 }, async (req, accessToken, refreshToken, profile, done) => {
-    const state = req.query.state
+    const state = req.query?.state
 
+    if (!state) return done(null, false, { message: i18next.t('Parametro "state" mancante dalla richiesta OAuth.') })
     try {
         const result = await pool.query(searchUserWithGoogleId, [profile.id]);
         const user = result.rows[0]
@@ -69,11 +70,10 @@ passport.use(new GoogleStrategy({
             const email = profile.emails?.[0]?.value
             if (!email) return done(null, false, { message: i18next.t("No email given by google") })
 
-            const result = await pool.query(FIND_USER_BY_EMAIL, [email])
-            if (result.rows.length > 0)
-                return done(null, false, { ok: false, message: i18next.t("This email is already used by another account") })
-
             if (!user) {
+                const result = await pool.query(FIND_USER_BY_EMAIL, [email])
+                if (result.rows.length > 0)
+                    return done(null, false, { ok: false, message: i18next.t("This email is already used by another account") })
                 const tempUser = {
                     userId: profile.id,
                     userEmail: email,
@@ -87,29 +87,26 @@ passport.use(new GoogleStrategy({
                     return done(err, false)
                 }
 
-                return done(null, false, { ok: true, message: i18next.t("Temporary user created. Complete registration."), id: profile.id })
+                return done(null, false, { ok: true, message: i18next.t("Temporary user created. Complete registration."), id: profile.id, state })
             } else {
                 return done(null, false, { message: i18next.t("An account is already associated with this Google address.") })
             }
-        } 
+        }
         else if (state === 'signin') {
             if (!user) {
-                // Nessun utente trovato con questo Google ID
                 return done(null, false, { ok: true, message: 'Nessun account utente collegato a questo account Google.' });
             }
 
-            // Utente trovato, autenticazione riuscita
-            return done(null, user);
+            return done(null, user, { state });
         }
 
-        // Stato non riconosciuto nella query string
         return done(null, false, { message: 'Parametro "state" non valido.' });
 
     } catch (error) {
         console.error('Errore durante l\'autenticazione con Google:', error);
         return done(error, false);
     }
-}));
+}))
 
 
 

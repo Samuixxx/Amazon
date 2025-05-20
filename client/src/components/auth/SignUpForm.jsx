@@ -33,7 +33,7 @@ const SignUpForm = ({ onChange }) => {
         setVerificationMethod(method)
     }
 
-    const verifyWithGoogle = async () => {
+    const signUpWithGoogle = async () => {
         window.location.href = `${process.env.REACT_APP_API_URL}/auth/signup/google`
     }
 
@@ -54,7 +54,7 @@ const SignUpForm = ({ onChange }) => {
                         {t("Sign up with:")}
                     </span>
                     <div className="social-login-container">
-                        <span className="social-icon" onClick={verifyWithGoogle}>
+                        <span className="social-icon" onClick={signUpWithGoogle}>
                             <FontAwesomeIcon icon={faGoogle} size="lg" />
                         </span>
                         <span className="social-icon">

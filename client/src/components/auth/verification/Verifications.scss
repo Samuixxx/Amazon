@@ -81,7 +81,7 @@ form.verification-form {
         margin-top: -$margin-sm;
         place-self: end;
 
-        > button.resend-button {
+        >button.resend-button {
             /* Style for the resend button */
             background: none;
             border: none;
@@ -119,6 +119,14 @@ form.verification-form {
                 text-decoration: underline;
             }
         }
+    }
+
+    >span.error-span {
+        color: red;
+        font-size: $font-size-md;
+        font-family: $font-family;
+        font-weight: 450;
+        letter-spacing: 0;
     }
 
     >button.submit-button {

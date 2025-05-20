@@ -42,6 +42,11 @@ const signUpSchema = Joi.object({
         cookies: Joi.boolean().valid(true).required(),
         marketing: Joi.boolean(), // opzionale
     }),
+    socialSignUp: Joi.object({
+        googleid: Joi.string().allow(null, ''),
+        facebookid: Joi.string().allow(null, ''),
+        microsoftid: Joi.string().allow(null, '')
+    }).optional(),
 })
 
 module.exports = { signUpSchema }

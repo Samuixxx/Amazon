@@ -6,7 +6,7 @@ const userSlice = createSlice({
     isAuthenticated: false,
     user: {},
     accessTimestamp: null,
-    socialSignUpId: null
+    socialSignUp: false
   },
   reducers: {
     setUser(state, action) {
@@ -30,11 +30,11 @@ const userSlice = createSlice({
       state.user = {}
       state.accessTimestamp = null
     },
-    setSocialSignUpId(state, action) {
-      state.socialSignUpId = action.payload
+    setSocialSignUp(state) {
+      state.socialSignUp = true
     }
   }
 })
 
-export const { setUser, setDisplayName, logout, setSocialSignUpId } = userSlice.actions
+export const { setUser, setDisplayName, logout, setSocialSignUp } = userSlice.actions
 export default userSlice.reducer

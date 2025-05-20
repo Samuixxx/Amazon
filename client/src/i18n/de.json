@@ -10,6 +10,7 @@
     "Click here to search": "Hier klicken, um zu suchen",
     "Orders and returns": "Bestellungen und Rücksendungen",
     "Welcome, Sign in": "Willkommen, Anmelden",
+    "Welcome, Sign in": "Willkommen, {{ name }}",
     "Daily Offers": "Tagesangebote",
     "Prime": "Prime",
     "Electronics": "Elektronik",

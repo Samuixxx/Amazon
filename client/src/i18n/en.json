@@ -10,6 +10,7 @@
     "Click here to search": "Click here to search",
     "Orders and returns": "Orders and returns",
     "Welcome, Sign in": "Welcome, Sign in",
+    "Welcome, {{name}}": "Welcome, {{ name }}",
     "Daily Offers": "Daily Offers",
     "Prime": "Prime",
     "Electronics": "Electronics",

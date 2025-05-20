@@ -148,3 +148,67 @@ $form-social-fb-background: #3b5998;
 $form-social-google-background: #db4437;
 $form-shadow-color: rgba(8, 7, 16, 0.6);
 $form-backdrop-filter: blur(10px);
+
+// ------------------------------
+// COLORI PRINCIPALI
+// ------------------------------
+$primary-color: #4A90E2;              // blu acceso, principale
+$primary-hover-color: #3A7CC3;
+$primary-light: #EAF2FB;
+
+// ------------------------------
+// COLORI SECONDARI
+// ------------------------------
+$secondary-color: #F5A623;            // arancio ambrato
+$secondary-hover-color: #e59410;
+$secondary-light: #FFF3E0;
+
+// ------------------------------
+// BACKGROUND
+// ------------------------------
+$page-background-color: #f9fafc;      // molto chiaro, quasi bianco
+$background-light: #ffffff;
+$background-medium: #f4f6f8;
+$background-dark: #dde3ea;
+
+// ------------------------------
+// TESTO
+// ------------------------------
+$text-dark: #1c1e21;
+$text-muted: #5f6368;
+$text-light: #9aa0a6;
+
+// ------------------------------
+// HEADER / NAVBAR
+// ------------------------------
+$header-background-color: #ffffff;
+$header-text-color: #1c1e21;
+$header-border-color: #1b1515;
+$navbar-background-color: #f0f4f9;
+$navbar-hover-background: #dbe9f6;
+$navbar-active-background: #c9dffc;
+
+// ------------------------------
+// ACCENTI
+// ------------------------------
+$accent-color: #7B61FF;               // viola moderno, per bottoni/cta
+$accent-hover-color: #674ae0;
+$accent-text-color: #ffffff;
+
+$success-color: #43aa8b;
+$warning-color: #f4b400;
+$error-color: #d93025;
+$info-color: #2ba6f6;
+
+// ------------------------------
+// CARD / MODAL
+// ------------------------------
+$card-background-color: #ffffff;
+$card-hover-background: #f5f9ff;
+$card-shadow-color: rgba(0, 0, 0, 0.06);
+
+// ------------------------------
+// SCROLLBAR
+// ------------------------------
+$scrollbar-thumb-color: #c0c7d1;
+$scrollbar-track-color: #f0f4f9;

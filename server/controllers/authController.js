@@ -28,7 +28,8 @@ const signUpNewUser = async (req, res) => {
             postalcode,
             specifications,
             coordinates,
-            termsconfirm
+            termsconfirm,
+            socialSignUp
         } = req.body
 
         if (!coordinates || !termsconfirm) {
@@ -36,6 +37,7 @@ const signUpNewUser = async (req, res) => {
         }
 
         const { terms, privacy, cookies, marketing } = termsconfirm
+        const { googleid, facebookid, microsoftid } = socialSignUp
         const { latitude, longitude } = coordinates
         const address = `${addressone || ''} ${addresstwo || ''}`.trim()
         const salt = await bcrypt.genSalt(12);
@@ -57,7 +59,11 @@ const signUpNewUser = async (req, res) => {
             terms,
             privacy,
             cookies,
-            marketing
+            marketing,
+            googleid || null,
+            facebookid || null,
+            microsoftid || null,
+            true
         ])
 
         const newUser = result.rows[0]
@@ -175,28 +181,37 @@ const verifyEmailOtp = async (req, res) => {
     const { code, clientId } = req.body
 
     const clientAttemptsKey = `otp:email:attempts:${clientId}`
-    const attempts = await redis.get(clientAttemptsKey)
-    if (!attempts) {
+    const attemptsStr = await redis.get(clientAttemptsKey)
+    const attempts = parseInt(attemptsStr, 10)
+
+    if (isNaN(attempts) || attempts <= 0) {
         await redis.del(clientAttemptsKey)
         return res.status(400).json({ ok: false, message: 'Attempts finished, ask for another code' })
     }
 
     const clientKey = `otp:email:${clientId}`
     const ttlMilliseconds = await redis.pTTL(clientKey)
-    if (ttlMilliseconds === -2) return res.status(401).json({ ok: false, message: 'The code is expired, ask for another code' })
+    if (ttlMilliseconds === -2)
+        return res.status(401).json({ ok: false, message: 'The code is expired, ask for another code' })
 
     const clientCode = await redis.get(clientKey)
-    if (!clientCode) return res.status(400).json({ ok: false, message: 'No codes for given client id' })
+    if (!clientCode)
+        return res.status(400).json({ ok: false, message: 'No codes for given client id' })
 
     if (code !== clientCode) {
-        await redis.set(clientAttemptsKey, attempts - 1)
-        return res.status(401).json({ ok: false, message: `Wrong code, ${attempts} attempts left` })
+        const newAttempts = attempts - 1
+        await redis.set(clientAttemptsKey, newAttempts)
+        return res.status(401).json({
+            ok: false,
+            message: `Wrong code, ${newAttempts} attempt${newAttempts === 1 ? '' : 's'} left`
+        })
     }
 
     await redis.del(clientAttemptsKey)
     await redis.del(clientKey)
     res.json({ ok: true })
 }
+
 
 const getOTPFromMessage = async (req, res) => {
     const phoneNumber = req.body.phoneNumber.trim()
@@ -219,28 +234,37 @@ const verifySmsOtp = async (req, res) => {
     const { code, clientId } = req.body
 
     const clientAttemptsKey = `otp:message:attempts:${clientId}`
-    const attempts = await redis.get(clientAttemptsKey)
-    if (!attempts) {
+    const attemptsStr = await redis.get(clientAttemptsKey)
+    const attempts = parseInt(attemptsStr, 10)
+
+    if (isNaN(attempts) || attempts <= 0) {
         await redis.del(clientAttemptsKey)
         return res.status(400).json({ ok: false, message: 'Attempts finished, ask for another code' })
     }
 
     const clientKey = `otp:message:${clientId}`
     const ttlMilliseconds = await redis.pTTL(clientKey)
-    if (ttlMilliseconds === -2) return res.status(401).json({ ok: false, message: 'The code is expired, ask for another code' })
+    if (ttlMilliseconds === -2)
+        return res.status(401).json({ ok: false, message: 'The code is expired, ask for another code' })
 
     const clientCode = await redis.get(clientKey)
-    if (!clientCode) return res.status(400).json({ ok: false, message: 'No codes for given client id' })
+    if (!clientCode)
+        return res.status(400).json({ ok: false, message: 'No codes for given client id' })
 
     if (code !== clientCode) {
-        await redis.set(clientAttemptsKey, attempts - 1)
-        return res.status(401).json({ ok: false, message: `Wrong code, ${attempts} attempts left` })
+        const newAttempts = attempts - 1
+        await redis.set(clientAttemptsKey, newAttempts)
+        return res.status(401).json({
+            ok: false,
+            message: `Wrong code, ${newAttempts} attempt${newAttempts === 1 ? '' : 's'} left`
+        })
     }
 
     await redis.del(clientAttemptsKey)
     await redis.del(clientKey)
     res.json({ ok: true })
 }
+
 
 const getOTPFromCall = async (req, res) => {
     const phoneNumber = req.body.phoneNumber
@@ -261,28 +285,37 @@ const getOTPFromCall = async (req, res) => {
 const verifyCallOtp = async (req, res) => {
     const { code, clientId } = req.body
     const clientAttemptsKey = `otp:call:attempts:${clientId}`
-    const attempts = await redis.get(clientAttemptsKey)
-    if (!attempts) {
+    const attemptsStr = await redis.get(clientAttemptsKey)
+    const attempts = parseInt(attemptsStr, 10)
+
+    if (isNaN(attempts) || attempts <= 0) {
         await redis.del(clientAttemptsKey)
         return res.status(400).json({ ok: false, message: 'Attempts finished, ask for another code' })
     }
 
     const clientKey = `otp:call:${clientId}`
     const ttlMilliseconds = await redis.pTTL(clientKey)
-    if (ttlMilliseconds === -2) return res.status(401).json({ ok: false, message: 'The code is expired, ask for another code' })
+    if (ttlMilliseconds === -2)
+        return res.status(401).json({ ok: false, message: 'The code is expired, ask for another code' })
 
     const clientCode = await redis.get(clientKey)
-    if (!clientCode) return res.status(400).json({ ok: false, message: 'No codes for given client id' })
+    if (!clientCode)
+        return res.status(400).json({ ok: false, message: 'No codes for given client id' })
 
     if (code !== clientCode) {
-        await redis.set(clientAttemptsKey, attempts - 1)
-        return res.status(401).json({ ok: false, message: `Wrong code, ${attempts} attempts left` })
+        const newAttempts = attempts - 1
+        await redis.set(clientAttemptsKey, newAttempts)
+        return res.status(401).json({
+            ok: false,
+            message: `Wrong code, ${newAttempts} attempt${newAttempts === 1 ? '' : 's'} left`
+        })
     }
 
     await redis.del(clientAttemptsKey)
     await redis.del(clientKey)
     res.json({ ok: true })
 }
+
 
 const getUserSocialSignUpInfo = async (req, res) => {
     const { method } = req.params

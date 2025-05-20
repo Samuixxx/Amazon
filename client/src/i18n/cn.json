@@ -10,6 +10,7 @@
     "Click here to search": "点击这里搜索",
     "Orders and returns": "订单和退货",
     "Welcome, Sign in": "欢迎，登录",
+    "Welcome, {{name}}": "欢迎 {{name}}",
     "Daily Offers": "每日优惠",
     "Prime": "Prime",
     "Electronics": "电子产品",
