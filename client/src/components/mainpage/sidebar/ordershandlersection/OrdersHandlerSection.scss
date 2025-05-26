@@ -1,0 +1,55 @@
+@use 'sass:math' as math;
+@use 'sass:color' as color;
+@use '../../../../styles/index' as *;
+
+section.orders-handler-container {
+    width: 100%;
+    position: relative;
+    margin-top: $margin-md;
+    padding-bottom: $padding-md;
+    @include border-bottom-inset(color.adjust($navbar-border-color, $alpha: -0.6), 2px);
+    @include flex(start, center, column);
+
+    >h2.orders-handler-title {
+        font-family: $font-family;
+        font-size: calc($font-size-lg - 0.1rem);
+        font-weight: 500;
+        color: $page-text-color;
+        padding: 0 $padding-md;
+    }
+
+    >span.orders-handler-track-option,
+    >span.orders-handler-returns-option,
+    >span.orders-handler-help-center-option {
+        width: 100%;
+        padding: $padding-sm $padding-lg $padding-sm $padding-md;
+        font-size: $font-size-sm;
+        font-weight: 400;
+        color: $page-text-color;
+        background-color: transparent;
+        cursor: pointer;
+
+        @include transition(background-color 0.1s ease-in-out);
+
+        &:hover {
+            background-color: color.adjust($navbar-background-color, $lightness: -40%);
+        }
+    }
+
+    >svg {
+        position: absolute;
+        right: 5%;
+    }
+
+    >svg:first-of-type {
+        top: 26%;
+    }
+
+    >svg:nth-of-type(2) {
+        top: 50%;
+    }
+
+    >svg:last-of-type {
+        top: 73.5%;
+    }
+}

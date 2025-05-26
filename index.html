@@ -1,0 +1,72 @@
+<form id="upload-form" action="https://localhost:8433/api/products/createProduct">
+    <input type="text" name="name" placeholder="Name" required value="Monopattino Elettrico Pieghevole per Pendolari" />
+    <input type="text" name="vendor" placeholder="Vendor" required value="UrbanGlide" />
+    <label for="description">Description (JSON):</label>
+    <textarea name="description" rows="10" cols="50" required>
+{
+  "en": "Foldable electric scooter for efficient urban commuting, offering a fast and eco-friendly ride.",
+  "it": "Monopattino elettrico pieghevole per pendolari urbani efficienti, offre una guida veloce ed ecologica.",
+  "es": "Patinete eléctrico plegable para desplazamientos urbanos eficientes, que ofrece un viaje rápido y ecológico.",
+  "fr": "Trottinette électrique pliable pour les déplacements urbains efficaces, offrant une conduite rapide et écologique.",
+  "de": "Faltbarer Elektroroller für effizientes Pendeln in der Stadt, der eine schnelle und umweltfreundliche Fahrt bietet.",
+  "cn": "可折叠电动滑板车，高效城市通勤，提供快速环保的骑行体验。"
+}
+    </textarea>
+    <label for="specifications">Specifications (JSON):</label>
+    <textarea name="specifications" rows="10" cols="50" required>
+{
+  "en": "25km/h max speed, 30km range, 350W motor, disc brakes, LED display, lightweight aluminum frame.",
+  "it": "Velocità massima 25 km/h, autonomia 30 km, motore 350W, freni a disco, display LED, telaio leggero in alluminio.",
+  "es": "Velocidad máxima de 25 km/h, autonomía de 30 km, motor de 350W, frenos de disco, pantalla LED, cuadro ligero de aluminio.",
+  "fr": "Vitesse max 25 km/h, autonomie 30 km, moteur 350W, freins à disque, écran LED, cadre en aluminium léger.",
+  "de": "25 km/h Höchstgeschwindigkeit, 30 km Reichweite, 350W Motor, Scheibenbremsen, LED-Anzeige, leichter Aluminiumrahmen.",
+  "cn": "最高时速25公里/小时，续航30公里，350W电机，碟刹，LED显示屏，轻质铝合金车架。"
+}
+    </textarea>
+    <input type="number" name="price" placeholder="Price" step="0.01" required value="499.00" />
+    <input type="number" name="quantity" placeholder="Quantity" required value="60" />
+    <input type="file" name="images" multiple />
+    <input type="file" name="models" />
+    <input type="text" name="subcategory_id" value="102" hidden>
+    <button type="submit">Upload Product</button>
+</form>
+
+<script>
+    document.getElementById('upload-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData
+            });
+
+            let result;
+
+            // Verifica che la risposta sia in formato JSON
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+                result = await response.json();
+            } else {
+                // Se non è JSON, leggi il testo (probabilmente HTML)
+                const text = await response.text();
+                console.error("Risposta non JSON:", text);
+                alert("Errore: Il server ha restituito una risposta non valida.");
+                return;
+            }
+
+            if (response.ok) {
+                alert(result.message || '✅ Prodotto caricato con successo');
+                form.reset();
+            } else {
+                alert(result.error || '❌ Errore durante il caricamento: ' + (result.details || result.message));
+            }
+        } catch (err) {
+            console.error('🚨 Errore nella richiesta:', err);
+            alert('⚠️ Richiesta fallita: ' + err.message);
+        }
+    });
+</script>

@@ -39,14 +39,6 @@ const redisClient = require('./db/redisClient')
 // -------- AUTHENTICATION --------
 const passport = require('./config/passport')
 
-// NGROK CONFIG
-app.set('trust proxy', 1)
-
-app.use((req, res, next) => {
-    res.locals.nonce = crypto.randomBytes(16).toString('base64')
-    next()
-})
-
 // -------- TRANSLATIONS ---------
 i18next
     .use(Backend)
@@ -71,9 +63,9 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", (req, res) => `'nonce-${res.locals.nonce}'`],
+            scriptSrc: ["'self'"],
             styleSrc: ["'self'"],
-            imgSrc: ["'self'"],
+            imgSrc: ["'self'", process.env.CLIENT_ORIGIN_URL],
             fontSrc: ["'self'"],
             objectSrc: ["'none'"],
             frameAncestors: ["'none'"],
@@ -82,7 +74,7 @@ app.use(helmet({
     },
     crossOriginEmbedderPolicy: true,
     crossOriginOpenerPolicy: { policy: "same-origin" },
-    crossOriginResourcePolicy: { policy: "same-origin" },
+    crossOriginResourcePolicy: { policy: "cross-origin" },
     referrerPolicy: { policy: "no-referrer" },
     permittedCrossDomainPolicies: { permittedPolicies: "none" },
     hsts: {
@@ -108,11 +100,11 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        httpOnly: true,  
-        secure: process.env.NODE_ENV === 'production', 
-        maxAge: 1000 * 60 * 60 * 24 * 7,  
-        },
-    })
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+    },
+})
 )
 
 // -------- SANITIZATION --------
@@ -125,18 +117,12 @@ app.use(morgan('combined'))
 // -------- CROSS-ORIGIN --------
 allowedOrigins = [
     process.env.CLIENT_ORIGIN_URL,
-    process.env.SERVER_ORIGIN_URL
+    process.env.SERVER_ORIGIN_URL,
+    'http://127.0.0.1:5500'
 ]
 
 app.use(cors({
-    origin: (origin, callback) => {
-        if(!origin) return callback(null, true);
-        if(allowedOrigins.indexOf(origin) === -1){
-        const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
-        return callback(new Error(msg), false);
-        }
-        return callback(null, true);
-    },
+    origin: allowedOrigins,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-XSRF-TOKEN'],
@@ -144,7 +130,7 @@ app.use(cors({
 
 // -------- PARSING --------
 app.use(cookieParser())
-app.use(express.json())
+app.use(express.json({ limit: '100mb' }))
 app.use(express.urlencoded({ extended: true }))
 
 // -------- AUTHENTICATION --------
@@ -166,6 +152,21 @@ if (process.env.NODE_ENV === 'production') {
 // -------- ROUTERS --------
 app.use("/api", apiRouter)
 app.use("/auth", authRouter)
+
+// -------- STATIC FOLDER FOR SAVING IMAGES ---------
+const uploadFolder = path.join(__dirname, '../uploads')
+app.use('/uploads', express.static(uploadFolder))
+
+const requiredDirs = [
+    path.join(__dirname, '../uploads/products/images'),
+    path.join(__dirname, '../uploads/products/models')
+]
+
+requiredDirs.forEach(dir => {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true })
+    }
+})
 
 // -------- START SERVERS --------
 const httpsOptions = {

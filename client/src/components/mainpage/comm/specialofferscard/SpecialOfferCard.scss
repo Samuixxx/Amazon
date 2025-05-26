@@ -1,0 +1,78 @@
+@use 'sass:math' as math;
+@use 'sass:color' as color;
+@use '../../../../styles/index' as *;
+
+article.special-offer-card {
+    width: 28%;
+    height: 300px;
+    position: relative;
+    padding: $padding-md;
+    @include flex(start, center, column);
+    @include box-shadow(0 2px 4px 3px $card-shadow-color);
+    background-color: rgba(255, 255, 255, 0.80);
+    overflow: hidden;
+    gap: $padding-sm;
+
+    >h2.special-offer-card-title {
+        font-family: $font-family;
+        font-size: calc($font-size-md * 1.1);
+        color: $page-text-color;
+        font-weight: 500;
+        text-align: start;
+        width: 100%;
+    }
+
+    >img.special-offer-image,
+    >model-viewer.special-offer-model {
+        width: 100%;
+        height: 200px;
+        min-height: 200px;
+        object-fit: cover;
+        background-color: #000000;
+        color: red;
+        @include border(1px, #000000, $border-radius-sm);
+    }
+
+    >span.special-offer-end-time {
+        position: absolute;
+        left: 5%;
+        top: 12.5%;
+        z-index: 5;
+        padding: 0.1rem 0.3rem;
+        background-color: #ff5454f7;
+        color: $text-muted;
+        font-family: $font-family;
+        font-size: $font-size-sm;
+        font-weight: bold;
+    }
+
+    >span.special-offer-discount {
+        font-family: $font-family;
+        font-size: $font-size-md;
+        font-weight: bold;
+        color: $accent-color;
+        position: absolute;
+        left: 6%;
+        bottom: 6%;
+    }
+
+    >span.special-offer-go-to {
+        align-self: flex-end;
+        width: fit-content;
+        padding: 0.3rem 0.6rem;
+        border-radius: $border-radius-sm;
+        background-color: $primary-color;
+        color: white;
+        font-size: $font-size-sm;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+        }
+
+        >svg {
+            margin-left: math.div($margin-sm, 2);
+        }
+    }
+}

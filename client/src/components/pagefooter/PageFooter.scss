@@ -1,0 +1,92 @@
+@use 'sass:math';
+@use 'sass:color';
+@use '../../styles/index' as *;
+
+footer.page-footer {
+    width: 100%;
+    background-color: $footer-background-color;
+    color: $footer-text-color;
+    padding: $padding-xl $padding-lg;
+    font-family: $font-family;
+    font-size: $font-size-md;
+    @include flex(start, stretch, column);
+    gap: $gap-lg;
+
+    .footer-top {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: $gap-lg;
+    }
+
+    .footer-section {
+        h4 {
+            font-size: $font-size-lg;
+            font-weight: 600;
+            margin-bottom: $margin-sm;
+            color: $text-dark;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+                margin-bottom: $margin-sm;
+                font-size: $font-size-md;
+                color: $text-muted;
+
+                a {
+                    color: $text-muted;
+                    text-decoration: none;
+                    transition: color 0.2s ease;
+
+                    &:hover {
+                        color: $accent-color;
+                    }
+                }
+            }
+        }
+
+        > div.payment-methods {
+            @include flex(start, center, column);
+            gap: $gap-sm;
+
+            > div.payment-method {
+                @include flex(center, start);
+                gap: $gap-sm;
+            }
+        }
+
+        .social-links {
+            @include flex(start, start, column);
+            gap: $gap-sm;
+
+            a {
+                @include flex(start, center);
+                gap: $gap-sm;
+                font-size: $font-size-md;
+                color: $text-muted;
+
+                &:hover {
+                    color: $accent-color;
+                }
+
+                svg {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+        }
+    }
+
+    .footer-bottom {
+        width: 100%;
+        padding-top: $padding-md;
+        border-top: 1px solid color.adjust($footer-border-color, $alpha: -0.4);
+        font-size: $font-size-sm;
+        color: $text-subtle;
+        text-align: center;
+    }
+}

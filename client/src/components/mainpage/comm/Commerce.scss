@@ -1,0 +1,23 @@
+@use 'sass:math' as math;
+@use 'sass:color' as color;
+@use '../../../styles/index' as *;
+
+section.commerce-container {
+    width: 70%;
+    min-height: calc(100vh - $padding-md);
+
+    >*::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    >*::-webkit-scrollbar-thumb {
+        background-color: $scrollbar-thumb-color;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    >*::-webkit-scrollbar-track {
+        background: $scrollbar-track-color;
+        border-radius: 5px;
+    }
+}

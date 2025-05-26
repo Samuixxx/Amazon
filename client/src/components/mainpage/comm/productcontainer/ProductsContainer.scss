@@ -1,0 +1,10 @@
+@use 'sass:math' as math;
+@use 'sass:color' as color;
+@use '../../../../styles/index'as *;
+
+div.products-container {
+    margin-top: -15.5%;
+    width: 100%;
+    padding: $padding-md;
+    @include flex(start, start, column);
+}

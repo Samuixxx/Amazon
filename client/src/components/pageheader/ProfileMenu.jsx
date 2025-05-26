@@ -28,7 +28,7 @@ const ProfileMenu = () => {
             <h2 className="profile_menu_ref">
                 {userFirstName
                     ? t('Welcome, {{name}}', { name: userFirstName })
-                    : t('Sign in')}
+                    : t('Welcome, Sign in')}
             </h2>
         </section>
     )

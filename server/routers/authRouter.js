@@ -7,14 +7,17 @@ const { sanitizeBody } = require('../middleware/sanitizeBody')
 const validateBody = require('../middleware/validateBody')
 const { signUpSchema } = require('../schemas/signUpSchema')
 const { signInSchema } = require('../schemas/signInSchema')
-const { signInUser, signUpNewUser, getOTPFromEmail, verifyEmailOtp, getOTPFromMessage, verifySmsOtp, getOTPFromCall, verifyCallOtp, getUserSocialSignUpInfo, isPhoneNumberAlreadyUsed } = require('../controllers/authController')
+const { initUser, signInUser, signUpNewUser, getOTPFromEmail, verifyEmailOtp, getOTPFromMessage, verifySmsOtp, getOTPFromCall, verifyCallOtp, getUserSocialSignUpInfo, isPhoneNumberAlreadyUsed } = require('../controllers/authController')
 const { verifyXSRFToken } = require('../controllers/apiController')
 const validateOrigin = require('../middleware/validateOrigin')
 const validateRequest = require('../middleware/validateRequest')
 const validateUuid = require('../middleware/validateUuid')
-
+const { validateRefreshToken } = require('../middleware/validateRefreshToken')
+const { generateTokens } = require('../tokens/generateTokens')
 
 const authRouter = Router()
+
+authRouter.get("/spawn/findUserByRefreshToken", validateOrigin, validateRefreshToken, initUser)
 
 authRouter.post("/signup", validateBody(signUpSchema), sanitizeBody, validateOrigin, verifyXSRFToken, signUpNewUser)
 authRouter.post("/signin", validateBody(signInSchema), sanitizeBody, validateOrigin, verifyXSRFToken, signInUser)
@@ -172,7 +175,7 @@ authRouter.get(
             }
 
             const { message, id, state } = info || {}
-            
+
             if (state === 'signup' && id) {
                 const token = jwt.sign(
                     { id },
@@ -190,22 +193,30 @@ authRouter.get(
                 })
 
                 return res.redirect(`${process.env.CLIENT_ORIGIN_URL}/finishRegistrationWithGoogle`)
-            } else if (state === 'signin' && user) {
-                const token = jwt.sign(
-                    { id },
-                    process.env.JWT_SECRET,
-                    {
-                        expiresIn: '30m'
-                    }
-                )
 
-                res.cookie('ur_pf_tk', token, {
+            } else if (state === 'signin' && user) {
+                const { accessToken, refreshToken } = generateTokens(user.id)
+                req.session.userDisplayName = user.displayName
+
+                res.cookie('access_token', accessToken, {
                     sameSite: 'none',
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
-                    maxAge: 60 * 30 * 1000
+                    maxAge: 30 * 60 * 1000
                 })
+
+                res.cookie('refresh_token', refreshToken, {
+                    sameSite: 'none',
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    maxAge: 30 * 60 * 1000
+                })
+                
+                req.session.userID = user.id
+                req.session.userDisplayName = user.displayName 
                 return res.redirect(`${process.env.CLIENT_ORIGIN_URL}/`)
+            } else {
+                return res.redirect(`${process.env.CLIENT_ORIGIN_URL}/ErrorAuthentication/${message}`)
             }
         })(req, res, next)
     }

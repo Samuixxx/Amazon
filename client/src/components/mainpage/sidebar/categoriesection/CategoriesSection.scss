@@ -1,0 +1,104 @@
+@use 'sass:math' as math;
+@use 'sass:color' as color;
+@use '../../../../styles/index' as *;
+
+section.main-categories-container {
+    width: 100%;
+    @include flex(start, start, column);
+    @include border-bottom-inset(color.adjust($navbar-border-color, $alpha: -0.6), 2px);
+
+    >h2.main-categories-title {
+        padding: $padding-sm $padding-md;
+        font-family: $font-family;
+        font-size: calc($font-size-lg - 0.1rem);
+        font-weight: 500;
+        color: $page-text-color;
+    }
+
+    >div.main-categories-container {
+        width: 100%;
+        @include flex(center, space-between);
+
+        >span.main-categories-span {
+            font-family: $font-family;
+            width: 100%;
+            padding: $padding-sm $padding-md;
+            font-size: $font-size-sm;
+            font-weight: 400;
+            color: $page-text-color;
+            background-color: transparent;
+            cursor: pointer;
+            @include transition(background-color 0.1s ease-in-out);
+
+            &:hover {
+                background-color: color.adjust($navbar-background-color, $lightness: -40%);
+            }
+        }
+
+        >svg {
+            position: absolute;
+            right: 5%;
+        }
+
+        &.last {
+            padding-bottom: $padding-md;
+            @include border-bottom-inset(color.adjust($navbar-border-color, $alpha: -0.6), 2px);
+        }
+    }
+
+    >div.daily-offers-link-container,
+    >div.new-products-link-container,
+    >div.payment-shipping-container {
+        margin-top: $margin-md;
+        width: 100%;
+        position: relative;
+        padding-bottom: $padding-md;
+        @include border-bottom-inset(color.adjust($navbar-border-color, $alpha: -0.6), 2px);
+        @include flex(start, center, column);
+
+        >h2.daily-offers-title,
+        >h2.new-products-title,
+        >h2.payment-shipping-title {
+            font-family: $font-family;
+            font-size: calc($font-size-lg - 0.1rem);
+            font-weight: 500;
+            color: $page-text-color;
+            padding: 0 $padding-md;
+        }
+
+        >span.daily-offers-span,
+        >span.new-products-span,
+        >span.payment-option-span,
+        >span.shipping-option-span {
+            width: 100%;
+            padding: $padding-sm $padding-lg $padding-sm $padding-md;
+            font-size: $font-size-sm;
+            font-weight: 400;
+            color: $page-text-color;
+            background-color: transparent;
+            cursor: pointer;
+
+            @include transition(background-color 0.1s ease-in-out);
+
+            &:hover {
+                background-color: color.adjust($navbar-background-color, $lightness: -40%);
+            }
+        }
+
+        >svg {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+        }
+    }
+
+    >div.payment-shipping-container {
+        >svg:first-of-type {
+            top: 33%;
+        }
+
+        >svg:last-of-type {
+            top: 66%;
+        }
+    }
+}

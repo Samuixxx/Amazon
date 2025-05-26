@@ -5,8 +5,7 @@
 main.main-page{
     width: 100%;
     min-height: 100vh;
-    @include flex(center, start);   
-    padding: $padding-md;
-    background-color: $page-background-color;
+    @include flex(start, center);   
+    background-color: $background-dark;
     position: relative;
 }

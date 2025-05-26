@@ -7,8 +7,8 @@
     -o-border-radius: $border-radius;
 }
 
-@mixin border-bottom-inset($color: #000, $size: 2px) {
-    box-shadow: inset 0 (-$size) 0 0 $color;
+@mixin border-bottom-inset($color: #000, $size: 2px, $blur: 0, $spread: 0) {
+    box-shadow: inset 0 (-$size) $blur $spread $color;
 }
 
 @mixin box-shadow($x: 0,

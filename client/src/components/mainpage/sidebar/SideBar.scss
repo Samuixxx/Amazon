@@ -3,11 +3,28 @@
 @use '../../../styles/index' as *;
 
 aside.main-page-sidebar{
+    z-index: 5;
     min-width: 240px;
     height: 100%;
     background-color: $header-background-color;
     position: absolute;
     left: 0;
     top: 0; 
-    @include flex(start, center, column);
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    @include flex(center, start, column);
+
+    > section.signup-container {
+        width: 100%;
+        padding: $padding-sm $padding-md;
+        @include flex(center, start);
+        gap: calc($padding-md * 0.75);
+        background-color: $navbar-background-color;
+        font-family: $font-family;
+        font-size: calc($font-size-lg - 0.1rem);
+        font-weight: 500;
+        color: $primary-color;
+        @include border-bottom-inset(color.adjust($navbar-border-color, $alpha: -0.6), 1px);
+        margin-bottom: $margin-md;
+    }
 }

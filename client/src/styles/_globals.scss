@@ -11,18 +11,18 @@
 }
 
 *::-webkit-scrollbar {
-    width: 6px;
+    width: 10px;
 }
 
 *::-webkit-scrollbar-thumb {
     background-color: $scrollbar-thumb-color;
-    border-radius: 3px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
 *::-webkit-scrollbar-track {
     background: $scrollbar-track-color;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 body {
     font-family: Arial, sans-serif;

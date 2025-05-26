@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const pool = require('../db')
 const bcrypt = require('bcryptjs')
-const { SESSION_DESERIALIZE_USER_QUERY: deserializeQuery, SIGNIN_USER_QUERY: loginQuery, SEARCH_USER_GOOGLE: searchUserWithGoogleId, FIND_USER_BY_EMAIL } = require('../queries/auth')
+const { SESSION_DESERIALIZE_USER_QUERY: deserializeQuery, SIGNIN_USER_QUERY: loginQuery, FIND_USER_BY_GOOGLEID: searchUserWithGoogleId, FIND_USER_BY_EMAIL } = require('../queries/auth')
 const redis = require('../db/redisClient')
 const i18next = require('i18next')
 
@@ -74,19 +74,6 @@ passport.use(new GoogleStrategy({
                 const result = await pool.query(FIND_USER_BY_EMAIL, [email])
                 if (result.rows.length > 0)
                     return done(null, false, { ok: false, message: i18next.t("This email is already used by another account") })
-                const tempUser = {
-                    userId: profile.id,
-                    userEmail: email,
-                    userDisplayName: profile.name.givenName,
-                    userFamilyName: profile.name.familyName
-                }
-
-                try {
-                    await redis.set(`tempuser:google:${profile.id}`, JSON.stringify(tempUser), 'EX', 600, 'NX')
-                } catch (err) {
-                    return done(err, false)
-                }
-
                 return done(null, false, { ok: true, message: i18next.t("Temporary user created. Complete registration."), id: profile.id, state })
             } else {
                 return done(null, false, { message: i18next.t("An account is already associated with this Google address.") })

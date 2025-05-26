@@ -212,3 +212,32 @@ $card-shadow-color: rgba(0, 0, 0, 0.06);
 // ------------------------------
 $scrollbar-thumb-color: #c0c7d1;
 $scrollbar-track-color: #f0f4f9;
+
+// ------------------------------
+// PRODUCT PAGE
+// ------------------------------
+$product-image-nav-button-size: 40px;
+$product-image-nav-button-background: rgba(0, 0, 0, 0.5);
+$product-image-nav-button-hover-background: rgba(0, 0, 0, 0.7);
+$product-image-nav-button-color: #ffffff;
+$product-image-nav-button-border-radius: 50%;
+$product-image-thumbnail-border-color: $primary-color;
+$product-image-thumbnail-active-border-width: 2px;
+
+$product-quantity-button-background: $background-medium;
+$product-quantity-button-hover-background: $gray-light;
+$product-quantity-button-border-color: $gray-medium;
+$product-quantity-text-color: $text-dark;
+$product-quantity-input-width: 60px;
+
+$product-add-to-cart-button-background: $accent-color;
+$product-add-to-cart-button-hover-background: $accent-hover-color;
+$product-add-to-cart-button-text-color: $accent-text-color;
+
+$product-price-color: $text-dark;
+$product-old-price-color: $text-muted;
+$product-discount-color: $error-color;
+
+$product-section-heading-color: $text-dark;
+$product-section-border-color: $gray-light;
+$product-section-padding: $padding-lg;

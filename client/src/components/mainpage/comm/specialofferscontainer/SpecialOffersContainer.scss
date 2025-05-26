@@ -1,0 +1,83 @@
+@use 'sass:math' as math;
+@use 'sass:color' as color;
+@use '../../../../styles/index' as *;
+
+div.special-offers-container {
+    width: 100%;
+    @include flex(start, center, column);
+
+    >h1.special-offers-container-title {
+        margin-left: calc($margin-md * 3);
+        font-family: $font-family;
+        font-size: math.clamp($font-size-xxl, 2.5rem, 2.8rem);
+        font-weight: 900;
+        background: linear-gradient(90deg, #6a11cb, #2575fc);
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        background-size: 200% 200%;
+        color: transparent;
+        text-shadow:
+            0 2px 4px rgba(38, 38, 38, 0.2),
+            0 4px 8px rgba(38, 38, 38, 0.15);
+        user-select: none;
+        z-index: 8;
+        text-align: start;
+    }
+
+    >div.special-offers-block {
+        width: 100%;
+        @include flex(center, space-evenly);
+
+        >div.special-offer-auth-prompt {
+        z-index: 5;
+        width: 28%;
+        height: 300px;
+        padding: $padding-lg;
+        background: linear-gradient(145deg, #1e1e2f, #2a2a40);
+        box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.2),
+            0 2px 4px rgba(0, 0, 0, 0.1);
+        color: #ffffffcc;
+        text-align: center;
+        @include flex(center, end, column);
+        gap: $gap-md;
+        font-family: $font-family;
+
+        >h3 {
+            vertical-align: top;
+            margin-bottom: auto;
+            width: 100%;
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #6a11cb, $primary-color);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            text-align: start;
+        }
+
+        >button {
+            width: 100%;
+            background-color: $primary-color;
+            color: white;
+            border: none;
+            padding: $padding-sm $padding-md;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            @include transition(background-color 0.2s ease, transform 0.2s ease);
+
+            &:hover {
+                background-color: #1e5bcc;
+                transform: scale(1.05);
+            }
+        }
+
+        >span {
+            place-self: end;
+        }
+
+    }
+    }
+}

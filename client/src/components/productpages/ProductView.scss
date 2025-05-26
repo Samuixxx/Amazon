@@ -1,0 +1,268 @@
+@use 'sass:math' as math;
+@use 'sass:color' as color;
+@use '../../styles/index.scss' as *;
+
+$product-bg: #f9f9f9;
+$product-primary-color: #1a73e8; // blu acceso
+$product-secondary-color: #555;
+$product-button-bg: #1a73e8;
+$product-button-hover-bg: #1669c1;
+$product-button-color: #fff;
+$product-button-radius: 8px;
+$product-shadow: rgba(0, 0, 0, 0.1);
+$product-gap: $gap-md;
+
+section.product-container {
+    background-color: $product-bg;
+    margin-left: 15%;
+    width: 70%;
+    height: 100%;
+    @include flex(start, center);
+    gap: calc($product-gap * 2.5);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px $product-shadow;
+    color: $product-secondary-color;
+
+    >div {
+        width: 50%;
+        height: 100%;
+    }
+
+    >div.product-left__views {
+        min-width: 680px;
+        height: math.clamp(600px, 600px, 600px);
+        @include flex(center, start);
+        gap: $product-gap;
+
+        >div.product-views-controls {
+            min-width: 96px;
+            width: 96px;
+            max-width: 96px;
+            height: 100%;
+            padding: 1rem;
+            @include flex(center, space-evenly, column);
+            align-self: stretch;
+            background-color: #fff;
+            border-radius: 12px;
+            @include box-shadow(0 2px 8px $product-shadow);
+
+            >button.product-views-controls__button {
+                width: 80%;
+                aspect-ratio: 1;
+                background-color: $product-button-bg;
+                border: none;
+                border-radius: $product-button-radius;
+                color: $product-button-color;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                @include box-shadow(0 3px 6px rgba(26, 115, 232, 0.5));
+                @include transition(background-color 0.3s ease, transform 0.2s ease);
+
+                &:hover {
+                    background-color: $product-button-hover-bg;
+                    transform: scale(1.05);
+                }
+
+                &:active {
+                    transform: scale(0.95);
+                }
+            }
+
+            >img,
+            model-viewer {
+                max-width: 100px;
+                width: 100%;
+                aspect-ratio: 1;
+                object-fit: contain;
+                border-radius: 8px;
+                @include box-shadow(0 0 2px 6px $product-shadow);
+            }
+        }
+
+        >div.product-views-assets-container {
+            width: 100%;
+            height: 100%;
+            @include flex(center, center);
+            background-color: #fff;
+            border-radius: $border-radius-df;
+            @include box-shadow(0 4px 20px $product-shadow);
+            padding: 1rem;
+
+            >img,
+            model-viewer {
+                width: 100%;
+                max-height: 100%;
+                height: 100%;
+                aspect-ratio: 1;
+                object-fit: cover;
+                display: block;
+                border-radius: 12px;
+            }
+        }
+    }
+
+    >div.product-right__info {
+        padding-left: 1rem;
+
+        .product-info__titles {
+            margin-bottom: calc($margin-md * 0.75);
+            @include border-bottom-inset($size: 1px);
+
+            .product-info-title {
+                color: $product-primary-color;
+                font-family: $font-family;
+                font-weight: 600;
+                font-size: calc($font-size-xxl * 1.1);
+                white-space: normal;
+                word-break: break-word;
+                overflow-wrap: break-word;
+            }
+
+            >span:first-of-type {
+                margin-top: math.div(-$margin-md, 4);
+                font-weight: 500;
+            }
+
+            span {
+                font-family: $font-family;
+                font-weight: 400;
+                font-size: $font-size-lg;
+                color: $product-secondary-color;
+                display: block;
+                margin-bottom: math.div($margin-md, 2);
+            }
+
+            .categories-card-ratings {
+                margin-top: math.div(-$margin-md, 3);
+                margin-bottom: $margin-sm;
+                position: relative;
+                display: inline-block;
+                font-family: $font-family;
+                font-weight: 350;
+                font-size: $font-size-md;
+                line-height: 1;
+                vertical-align: middle;
+                height: 1rem;
+
+                .stars-filled,
+                .stars-empty {
+                    display: flex;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    color: #ffc107;
+                    pointer-events: none;
+                    height: 100%; // forza le stelle a occupare tutta l’altezza del contenitore
+                }
+
+                .stars-filled {
+                    z-index: 2;
+                    width: 0; // sovrascritto da inline style
+                }
+
+                .stars-empty {
+                    z-index: 1;
+                    color: #ddd;
+                }
+
+                .star {
+                    margin-right: 0.1rem;
+                    line-height: 1;
+                    font-size: 1rem; // assicurati che le stelle abbiano la stessa dimensione del font
+                }
+
+                .rating-count {
+                    margin-left: calc($margin-md * 5.25);
+                    margin-top: -0.2rem;
+                    font-size: 1rem;
+                    color: $product-secondary-color;
+                    vertical-align: middle;
+                }
+            }
+
+        }
+
+        div.product-info {
+            height: auto;
+            width: 100%;
+            @include flex(center, start, column);
+
+            >div.product-info__price {
+                width: 100%;
+                @include flex(start, center, column);
+
+                >span.product-info__price-offer {
+                    padding: math.div($padding-sm, 3);
+                    font-family: $font-family;
+                    font-weight: 400;
+                    font-size: $font-size-md;
+                    background: $info-color;
+                    border-radius: math.div($border-radius-df, 5);
+                    text-align: center;
+                }
+
+                >span {
+                    letter-spacing: 0;
+                    margin-top: $margin-sm;
+                    padding: math.div($padding-sm, 3);
+                    font-family: $font-family;
+                    font-weight: 450;
+                    font-size: $font-size-lg;
+                    text-align: center;
+
+                    > em {
+                        font-weight: 550;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    section.product-container {
+        width: 100%;
+        flex-direction: column;
+
+        >div {
+            width: 100% !important;
+            min-height: 300px;
+        }
+
+        >div.product-left__views {
+            flex-direction: column;
+
+            >div.product-views-controls {
+                flex-direction: row;
+                max-width: 100%;
+                width: auto;
+                height: auto;
+                padding: 0.5rem;
+                justify-content: center;
+                gap: 1rem;
+
+                >button.product-views-controls__button {
+                    width: 48px;
+                    height: 48px;
+                }
+
+                >img,
+                model-viewer {
+                    max-width: 60px;
+                }
+            }
+
+            >div.product-views-assets-container {
+                max-width: 100%;
+                padding: 0.5rem;
+            }
+        }
+    }
+}

@@ -59,6 +59,32 @@ CREATE TABLE products (
     subcategory_id INTEGER NOT NULL REFERENCES subcategories(id)
 );
 
+CREATE TABLE product_images (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    image_url TEXT NOT NULL,
+    is_primary BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE special_offers (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    discount_percent NUMERIC(5,2) CHECK (discount_percent >= 0 AND discount_percent <= 100),
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
+    product_id INTEGER REFERENCES products(id) ON DELETE CASCADE,
+    subcategory_id INTEGER REFERENCES subcategories(id) ON DELETE CASCADE
+);
+
+CREATE TABLE product_models (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    model_url TEXT NOT NULL,
+    is_primary BOOLEAN DEFAULT FALSE
+);
+
 CREATE TABLE reviews (
     id SERIAL PRIMARY KEY,
     text TEXT NOT NULL,

@@ -1,0 +1,17 @@
+@use 'sass:math' as math;
+@use 'sass:color' as color;
+@use '../../styles/index' as *;
+
+main.product-page-main {
+    width: 100%;
+    min-height: 100vh;
+    height: 100vh;
+    @include flex(center, start, column);
+    gap: $gap-sm;
+    position: relative;
+
+    >div.product-page-main__container {
+        width: 100%;
+        position: relative;
+    }
+}

@@ -3,7 +3,7 @@ const redis = require('../db/redisClient')
 const bcrypt = require('bcryptjs')
 const passport = require('../config/passport')
 const jwt = require('jsonwebtoken')
-const { SIGNUP_USER_QUERY, FIND_USER_BY_TELEPHONE } = require('../queries/auth')
+const { SIGNUP_USER_QUERY, FIND_USER_BY_TELEPHONE, INIT_PROFILE} = require('../queries/auth')
 const { generateTokens } = require('../tokens/generateTokens')
 const { generateOtp } = require('../utils/otp')
 const { v4: uuidv4 } = require('uuid')
@@ -11,6 +11,47 @@ const { sendVerificationMail } = require('../utils/mailer')
 const { sendVerificationMessage } = require('../utils/messages')
 const { sendVerificationCall } = require('../utils/calls')
 const i18next = require('i18next')
+
+const initUser = async (req, res) => {
+    const cookie = req.cookies?.['access_token']
+    if (!cookie) {
+        return res.status(401).json({ ok: false, message: i18next.t("Missing cookie") })
+    }
+
+    let decoded
+    try {
+        decoded = jwt.verify(cookie, process.env.ACCESS_TOKEN_SECRET)
+    } catch (err) {
+        return res.status(400).json({ ok: false, message: i18next.t("Invalid token"), shouldDeleteToken: true })
+    }
+
+    const userID = decoded?.id
+    if (!userID) {
+        return res.status(401).json({ ok: false, message: i18next.t("Invalid token payload") })
+    }
+
+    try {
+        const result = await pool.query(INIT_PROFILE, [userID])
+        const row = result.rows[0]
+
+        if (!row) {
+            return res.status(404).json({ ok: false, message: i18next.t("User not found"), shouldDeleteToken: true })
+        }
+
+        return res.json({
+            ok: true,
+            profile: {
+                userEmail: row.email,
+                userDisplayName: row.name,
+                userFamilyName: row.surname
+            }
+        })
+    } catch (err) {
+        return res.status(500).json({ ok: false, message: i18next.t("Internal error"), error: err.message })
+    }
+}
+
+
 
 const signUpNewUser = async (req, res) => {
 
@@ -77,14 +118,14 @@ const signUpNewUser = async (req, res) => {
             res.cookie('access_token', accessToken, {
                 secure: process.env.NODE_ENV === "production",
                 httpOnly: true,
-                sameSite: 'Strict',
+                sameSite: 'none',
                 maxAge: 15 * 60 * 1000 // 15 minuti
             })
 
             res.cookie('refresh_token', refreshToken, {
                 secure: process.env.NODE_ENV === "production",
                 httpOnly: true,
-                sameSite: 'Strict',
+                sameSite: 'none',
                 maxAge: 7 * 24 * 60 * 60 * 1000 // 7 giorni
             })
 
@@ -382,4 +423,4 @@ const isPhoneNumberAlreadyUsed = async (req, res) => {
     }
 }
 
-module.exports = { signInUser, signUpNewUser, getOTPFromEmail, verifyEmailOtp, getOTPFromMessage, verifySmsOtp, getOTPFromCall, verifyCallOtp, getUserSocialSignUpInfo, isPhoneNumberAlreadyUsed }
+module.exports = { initUser, signInUser, signUpNewUser, getOTPFromEmail, verifyEmailOtp, getOTPFromMessage, verifySmsOtp, getOTPFromCall, verifyCallOtp, getUserSocialSignUpInfo, isPhoneNumberAlreadyUsed }
