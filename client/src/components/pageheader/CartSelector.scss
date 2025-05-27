@@ -21,12 +21,12 @@ section.user_cart {
 
     > span.cart_items_count{
         position: absolute;
-        left: 9%;
-        top: -25%;
+        left: 9.5%;
+        top: -27.5%;
         font-size: $font-size-md;
         font-family: $font-family;
-        font-weight: 500;
-        color: $text-subtle;
+        font-weight: 600;
+        color: $page-text-color;
         z-index: 2;
     }  
 }

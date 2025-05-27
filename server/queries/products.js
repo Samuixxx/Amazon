@@ -105,6 +105,47 @@ const GET_PRODUCTS_BY_CATEGORY = `
   ORDER BY RANDOM()
   LIMIT $2;
 `
+
+const GET_PRODUCTS_BY_SUBCATEGORY = `
+    SELECT 
+        p.id AS product_id,
+        p.name,
+        p.vendor,
+        p.price,
+        (
+            SELECT pr.model_url 
+            FROM public.product_models pr 
+            WHERE pr.product_id = p.id AND pr.model_url IS NOT NULL 
+            LIMIT 1
+        ) AS model_path,
+        (
+            CASE 
+                WHEN EXISTS (
+                    SELECT 1 
+                    FROM public.product_models pr 
+                    WHERE pr.product_id = p.id AND pr.model_url IS NOT NULL
+                )
+                THEN NULL
+                ELSE (
+                    SELECT pi.image_url 
+                    FROM public.product_images pi 
+                    WHERE pi.product_id = p.id AND pi.image_url IS NOT NULL 
+                    LIMIT 1
+                )
+            END
+        ) AS image_path,
+        COALESCE(AVG(r.rating), 0) AS average_rating,
+        COUNT(r.id) AS review_count
+    FROM products p
+    LEFT JOIN subcategories s ON p.subcategory_id = s.id
+    LEFT JOIN categories c ON s.category_id = c.id
+    LEFT JOIN reviews r ON r.product_id = p.id
+    WHERE s.name = $1
+    GROUP BY p.id, p.name, p.vendor, p.price
+    ORDER BY RANDOM()
+    LIMIT $2;
+`
+
 const GET_PRODUCT_SPECIFIC_INFO = `
    SELECT 
     p.id AS product_id,
@@ -202,4 +243,4 @@ WHERE p.id = $1
 ;`
 
 
-module.exports = { CREATE_PRODUCT, ADD_IMAGE_TO_PRODUCT, ADD_3DMODEL_TO_PRODUCT, GET_SPECIAL_OFFERS_PRODUCTS, GET_RANDOM_PRODUCTS, GET_PRODUCTS_BY_CATEGORY, GET_PRODUCT_SPECIFIC_INFO, GET_PRODUCT_PREVIEW }
+module.exports = { CREATE_PRODUCT, ADD_IMAGE_TO_PRODUCT, ADD_3DMODEL_TO_PRODUCT, GET_SPECIAL_OFFERS_PRODUCTS, GET_RANDOM_PRODUCTS, GET_PRODUCTS_BY_CATEGORY, GET_PRODUCTS_BY_SUBCATEGORY, GET_PRODUCT_SPECIFIC_INFO, GET_PRODUCT_PREVIEW }

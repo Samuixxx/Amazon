@@ -6,7 +6,7 @@ const axios = require('axios')
 const i18next = require('i18next')
 const redis = require('../db/redisClient')
 const pool = require('../db')
-const { CREATE_PRODUCT, ADD_IMAGE_TO_PRODUCT, ADD_3DMODEL_TO_PRODUCT, GET_SPECIAL_OFFERS_PRODUCTS, GET_RANDOM_PRODUCTS, GET_PRODUCTS_BY_CATEGORY, GET_PRODUCT_SPECIFIC_INFO } = require('../queries/products')
+const { CREATE_PRODUCT, ADD_IMAGE_TO_PRODUCT, ADD_3DMODEL_TO_PRODUCT, GET_SPECIAL_OFFERS_PRODUCTS, GET_RANDOM_PRODUCTS, GET_PRODUCTS_BY_CATEGORY, GET_PRODUCT_SPECIFIC_INFO, GET_PRODUCTS_BY_SUBCATEGORY } = require('../queries/products')
 
 const getAllCountries = (req, res) => {
     // Mappatura del parametro della lingua
@@ -288,6 +288,25 @@ const getProductsByCategory = async (req, res) => {
     }
 }
 
+const getProductsBySubcategory = async (req, res) => {
+    const { subCategoryName, limit } = req.query
+    const maxLimit = parseInt(limit, 10) || 10
+
+    try {
+        const result = await pool.query(GET_PRODUCTS_BY_SUBCATEGORY, [subCategoryName, maxLimit])
+        const rows = result.rows
+
+        if (!rows.length) {
+            return res.json({ ok: true, products: [] })
+        }
+
+        return res.json({ ok: true, products: rows })
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({ ok: false, message: i18next.t("Internal server error") })
+    }
+}
+
 const getProductForPage = async (req, res) => {
     const productId = req.params.productId
 
@@ -306,5 +325,83 @@ const getProductForPage = async (req, res) => {
     }
 }
 
+// -------- CART ---------
+const addItemToCart = async (req, res) => {
+    try {
+        const { productId, quantity, authenticated, cartId } = req.body
 
-module.exports = { getAllCountries, validateAddress, getXSRFToken, verifyXSRFToken, setLanguage, createProduct, getHomeData, getProductsByCategory, getProductForPage }
+        if (authenticated) {
+            const userId = req.session.userID
+            console.log(userId)
+            if (!userId) {
+                return res.status(401).json({ error: 'Utente non autenticato' })
+            }
+
+            let result = await pool.query('SELECT id FROM carts WHERE user_id = $1 LIMIT 1', [userId])
+            let cartDbId
+
+            if (result.rows.length === 0) {
+                const insertResult = await pool.query(
+                    `INSERT INTO carts (user_id, created_at, updated_at) VALUES ($1, NOW(), NOW()) RETURNING id`,
+                    [userId]
+                )
+                cartDbId = insertResult.rows[0].id
+            } else {
+                cartDbId = result.rows[0].id
+            }
+
+            result = await pool.query(
+                `SELECT id, quantity FROM cart_items WHERE cart_id = $1 AND product_id = $2`,
+                [cartDbId, productId]
+            )
+
+            if (result.rows.length === 0) {
+                await pool.query(
+                    `INSERT INTO cart_items (cart_id, product_id, quantity) VALUES ($1, $2, $3)`,
+                    [cartDbId, productId, quantity]
+                )
+            } else {
+                const itemId = result.rows[0].id
+                await pool.query(
+                    `UPDATE cart_items SET quantity = quantity + $1 WHERE id = $2`,
+                    [quantity, itemId]
+                )
+            }
+
+            await pool.query(
+                `UPDATE carts SET updated_at = NOW() WHERE id = $1`,
+                [cartDbId]
+            )
+
+            return res.status(200).json({ message: 'Prodotto aggiunto al carrello' })
+        }
+
+        // Per utente anonimo, cartId deve essere un uuidv4
+        let anonCartId = cartId
+        if (!anonCartId) {
+            anonCartId = uuidv4()
+        }
+
+        const redisKey = `cart:${anonCartId}`
+        let cartData = await redisClient.get(redisKey)
+        let cart = cartData ? JSON.parse(cartData) : {}
+
+        if (cart[productId]) {
+            cart[productId] += quantity
+        } else {
+            cart[productId] = quantity
+        }
+
+        await redisClient.set(redisKey, JSON.stringify(cart), 'EX', 60 * 60 * 24 * 5)
+
+        res.status(200).json({ message: 'Prodotto aggiunto al carrello anonimo', cartId: anonCartId })
+
+    } catch (error) {
+        console.error('Errore in addItemToCart:', error)
+        res.status(500).json({ error: 'Errore interno del server' })
+    }
+}
+
+
+
+module.exports = { getAllCountries, validateAddress, getXSRFToken, verifyXSRFToken, setLanguage, createProduct, getHomeData, getProductsByCategory, getProductsBySubcategory, getProductForPage, addItemToCart }

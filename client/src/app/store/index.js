@@ -4,24 +4,27 @@ import storage from 'redux-persist/lib/storage'
 import TokenReducer from '../../features/xsrftoken'
 import HomeReducer from '../../features/home'
 import UserReducer from '../../features/user'
+import CartReducer from '../../features/cart'
 
 const persistConfig = {
-  key: 'root',
-  storage,
+    key: 'root',
+    storage,
 }
 
 const persistedUserReducer = persistReducer(persistConfig, UserReducer)
+const persistedCartReducer = persistReducer(persistConfig, CartReducer)
 
 export const store = configureStore({
     reducer: {
         token: TokenReducer,
         user: persistedUserReducer,
-        home: HomeReducer
+        home: HomeReducer,
+        cart: persistedCartReducer
     },
     middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({
-      serializableCheck: false,    
-    })
+        getDefaultMiddleware({
+            serializableCheck: false,
+        })
 })
 
 export const persistor = persistStore(store)

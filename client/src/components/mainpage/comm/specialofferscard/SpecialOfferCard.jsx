@@ -1,6 +1,7 @@
 import './SpecialOfferCard.scss'
 import '@google/model-viewer'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
@@ -8,11 +9,16 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 const SpecialOfferCard = ({ product_id, name, discount, end_date, model_path, image_path }) => {
     const { t } = useTranslation()
+    const navigate = useNavigate()
     const formattedEndDate = dayjs(end_date).format('MM-DD')
     const formattedDiscount = discount.split('.')[0]
 
+    const handleClick = () => {
+        navigate(`/product?product_id=${product_id}`)
+    }
+
     return (
-        <article className="special-offer-card" key={product_id}>
+        <article className="special-offer-card" key={product_id} onClick={handleClick}>
             <h2 className="special-offer-card-title">{name}</h2>
 
             {model_path ? (
@@ -29,6 +35,9 @@ const SpecialOfferCard = ({ product_id, name, discount, end_date, model_path, im
                     exposure={1}
                     camera-orbit="0deg 90deg 6m"
                     field-of-view="30deg"
+                    onClick={(e) => e.stopPropagation()}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onTouchStart={(e) => e.stopPropagation()}
                 />
             ) : (
                 image_path ? (
@@ -36,6 +45,9 @@ const SpecialOfferCard = ({ product_id, name, discount, end_date, model_path, im
                         src={image_path ? `${process.env.REACT_APP_API_URL}${image_path}` : ''}
                         className="special-offer-image"
                         alt="Immagine non trovata"
+                        onClick={(e) => e.stopPropagation()}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onTouchStart={(e) => e.stopPropagation()}
                     />
                 ) : (
                     <p>Immagine non disponibile</p> // oppure null o un placeholder

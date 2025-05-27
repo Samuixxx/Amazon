@@ -1,0 +1,105 @@
+@use 'sass:math';
+@use '../../styles/index.scss' as *;
+
+.product-pay__container {
+    margin-top: $margin-md;
+    background-color: $card-background-color;
+    @include border(0, transparent, $border-radius-sm);
+    padding: math.div($padding-md, 1.25) math.div($padding-md, 1.15);
+    @include flex(start, start, column);
+    gap: $gap-md;
+    @include box-shadow(0, 4px, 8px, 0, $card-shadow-color);
+    width: 100%;
+
+    .product-pay__price {
+        font-size: $font-size-xl;
+        font-weight: 600;
+        color: $product-price-color;
+
+        strong {
+            font-size: $font-size-md;
+            font-weight: 500;
+            margin-left: math.div($margin-sm, 2);
+        }
+    }
+
+    .product-pay__shipping-day-expected-normal,
+    .product-pay__shipping-day-expected-prime {
+        font-size: $font-size-md;
+        font-weight: 400;
+        color: $text-muted;
+        margin-top: math.div($margin-sm, 1.5);
+    }
+
+    .product-pay__quantity-disponibility {
+        font-size: $font-size-md;
+        font-weight: 500;
+        color: $success-color;
+        margin-top: math.div($margin-sm, 2);
+    }
+
+    >form.product-pay__purchase-controls {
+        width: 100%;
+        @include flex(start, center, column);
+        gap: math.div($gap-sm, 1);
+
+        >select.product-pay__purchase-quantity {
+            width: 100%;
+            padding: math.div($padding-sm, 1.5) math.div($padding-sm, 1.25);
+            font-size: $font-size-md;
+            color: $product-quantity-text-color;
+            @include border(1px, $product-quantity-button-border-color, $border-radius-sm);
+            background-color: $background-light;
+            outline: none;
+            appearance: none;
+
+            option {
+                background-color: rgba(230, 220, 253, 0.58);
+            }
+
+            &:hover {
+                background-color: $product-quantity-button-hover-background;
+            }
+        }
+
+        >button.product-pay__purchase-button {
+            margin-top: $margin-md;
+            width: 100%;
+            padding: $padding-sm;
+            background-color: $product-add-to-cart-button-background;
+            color: $product-add-to-cart-button-text-color;
+            font-size: $font-size-md;
+            font-weight: 600;
+            border: none;
+            @include border(0, transparent, $border-radius-sm);
+            cursor: pointer;
+            @include transition(background-color 0.3s ease);
+
+            &:hover {
+                background-color: $product-add-to-cart-button-hover-background;
+            }
+        }
+
+        >button:last-of-type {
+            margin-top: -($margin-sm * 0.1);
+            background-color: goldenrod;
+            @include transition(background-color 0.3s ease);
+
+            &:hover {
+                // eventualmente un hover diverso, es:
+                background-color: darkgoldenrod;
+            }
+        }
+    }
+
+    >span {
+        margin-top: math.div(-$margin-sm, 1.2);
+        font-family: $font-family;
+        font-size: $font-size-sm;
+        font-weight: 450;
+    }
+
+    >span.product-pay__shipping-director {
+        margin-top: math.div(-$margin-sm, 2);
+    }
+}

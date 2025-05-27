@@ -1,0 +1,82 @@
+@use 'sass:math' as math;
+@use 'sass:color' as color;
+@use '../../styles/index.scss' as *;
+
+.customers-reviews__container {
+    width: 100%;
+    padding: $padding-xl;
+    background-color: $page-background-color;
+    font-family: $font-family;
+    color: $text-dark;
+    overflow-y: auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: $gap-md;
+
+    // Scrollbar personalizzata
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $scrollbar-track-color;
+        border-radius: $border-radius-sm;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $scrollbar-thumb-color;
+        border-radius: $border-radius-sm;
+        border: 2px solid $scrollbar-track-color;
+    }
+}
+
+.customers-reviews__item {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1rem;
+    background-color: $background-light;
+    border: 1px solid $card-border-color;
+    border-radius: $border-radius-sm;
+    padding: $padding-md;
+    box-shadow: $card-shadow-color;
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+        box-shadow: $shadow-hover;
+    }
+}
+
+.customers-reviews__reviser {
+    display: block;
+    font-size: $font-size-lg;
+    color: $text-dark;
+}
+
+.customers-reviews__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.star-rating {
+    font-size: $font-size-lg;
+    color: $secondary-color;
+
+    .star-empty {
+        color: $gray-light;
+    }
+}
+
+.customers-reviews__date {
+    display: block;
+    font-size: $font-size-sm;
+    color: $text-muted;
+}
+
+.customers-reviews__text {
+    font-size: $font-size-md;
+    line-height: 1.5;
+    margin-top: 0.5rem;
+    color: $text-dark;
+}

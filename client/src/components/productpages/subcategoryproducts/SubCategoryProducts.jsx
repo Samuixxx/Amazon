@@ -1,13 +1,13 @@
-import './CategoriesProduct.scss'
+import './SubCategoryProducts.scss'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import api from '../../../../axios'
-import CategoriesCard from '../categoriescard/CategoriesCard'
+import api from '../../../axios'
+import CategoriesCard from '../../mainpage/comm/categoriescard/CategoriesCard'
 
-const CategoriesProduct = ({ category }) => {
+const SubCategoriesProducts = ({ subcategoryName }) => {
     const { t } = useTranslation()
     const [products, setProducts] = useState(null)
-    const limit = 20
+    const limit = 10
 
     useEffect(() => {
         const controller = new AbortController()
@@ -15,7 +15,7 @@ const CategoriesProduct = ({ category }) => {
 
         const getProducts = async () => {
             try {
-                const request = await api.get(`/api/home/getDataByCategory?categoryName=${encodeURIComponent(category)}&limit=${limit}`, { signal })
+                const request = await api.get(`/api/home/getDataBySubCategory?subCategoryName=${encodeURIComponent(String(subcategoryName))}&limit=${limit}`, { signal })
                 const data = request.data
                 if (data.ok) setProducts(data.products)
                 else console.error(data.message)
@@ -26,14 +26,14 @@ const CategoriesProduct = ({ category }) => {
             }
         }
 
-        if (category) {
+        if (subcategoryName) {
             getProducts()
         }
 
         return () => {
             controller.abort()
         }
-    }, [category])
+    }, [subcategoryName])
 
     if (!products) {
         return <div>{t('Loading...')}</div>
@@ -43,7 +43,7 @@ const CategoriesProduct = ({ category }) => {
         <div className="categories-product-container">
             <h1 className="categories-product-container-title"
             >
-                {category}
+                {t("Other products from this category")}
             </h1>
             <div className='category-products-block scrollable'>
                 {products.map(products => {
@@ -67,4 +67,4 @@ const CategoriesProduct = ({ category }) => {
 
 }
 
-export default CategoriesProduct
+export default SubCategoriesProducts

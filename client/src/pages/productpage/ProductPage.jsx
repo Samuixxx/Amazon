@@ -1,15 +1,14 @@
 import './ProductPage.scss'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 import api from '../../axios'
 import PageHeader from '../../components/pageheader/PageHeader'
+import PageFooter from '../../components/pagefooter/PageFooter'
 import CategoriesNavbar from '../../components/categories/CategoriesNavbar'
 import ProductView from '../../components/productpages/ProductView'
 import MainPageSideBar from '../../components/mainpage/sidebar/SideBar'
 
 const ProductPage = () => {
-    const { i18n } = useTranslation()
     const location = useLocation()
     const params = new URLSearchParams(location.search)
     const productId = params.get('product_id')
@@ -49,12 +48,13 @@ const ProductPage = () => {
                 <div className="product-page-main__container">
                     <MainPageSideBar />
                     <ProductView
+                        productId={product.product_id}
                         productName={product.name}
                         vendor={product.vendor}
                         price={product.price}
                         quantity={product.quantity}
-                        mappedDescription={product.description[i18n.language.split('-')[0]]}
-                        mappedSpecifications={product.specifications[i18n.language.split('-')[0]]}
+                        description={product.description}
+                        specifications={product.specifications}
                         subcategoryName={product.subcategory_name}
                         model_path={product.model_path || null}
                         images_arr={product.image_paths}
@@ -67,6 +67,7 @@ const ProductPage = () => {
             ) : (
                 <p className="product-loading">Loading...</p>
             )}
+            <PageFooter />
         </main>
     )
 
