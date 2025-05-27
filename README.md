@@ -35,6 +35,7 @@ Il progetto implementa una serie di best practice per garantire la sicurezza del
 
 ## 📁 Struttura del Progetto
 
+```bash
 amazonreplica/
 ├── client/                # Frontend React
 │   └── src/
@@ -48,7 +49,7 @@ amazonreplica/
 ├── .gitignore
 ├── README.md
 └── package.json
-
+```
 ---
 
 ## 🔧 Setup & Avvio
@@ -57,10 +58,14 @@ amazonreplica/
 
 ```bash
 git clone https://github.com/Samuixxx/Amazon.git
-cd amazonreplica
+cd Amazon
 ```
 
 ### 2. Installa le dipendenze
+# Root
+```bash
+npm install
+```
 
 # Backend
 
@@ -91,7 +96,7 @@ Assicurati di avere i certificati SSL (`key.pem`, `cert.pem`) nella directory `s
 Esempio di file `.env` per il server:
 
 ```.env
-SERVER_PORT=443
+SERVER_PORT=8433
 CLIENT_BUILD_PATH=../client/build
 ```
 
