@@ -76,6 +76,7 @@
 <h3 id="database">Database</h3>
 <ul>
 <li>🐘 <strong>PostgreSQL</strong> — Database relazionale potente e robusto</li>
+<li>⚡ <strong>Redis</strong> — Database in-memory per accessi rapidi a dati persistenti</li>
 </ul>
 <h3 id="dipendenze-root-del-progetto">Dipendenze Root del Progetto</h3>
 <ul>
@@ -137,7 +138,7 @@ npm install
 <hr />
 <h2 id="-variabili-dambiente">🌐 Variabili d’Ambiente</h2>
 <p>Esempio di file <code>.env</code> per il server:</p>
-<pre><code class="language-dotenv">SERVER_PORT=443
+<pre><code class="language-dotenv">SERVER_PORT=8433
 CLIENT_BUILD_PATH=../client/build
 </code></pre>
 <hr />
