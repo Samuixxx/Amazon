@@ -1,4 +1,4 @@
-# 🛒 Amazon Replica
+# 🛒 Shophub
 
 **Amazon Replica** è una web application full-stack che replica le funzionalità principali dell’interfaccia utente e della logica server-side di Amazon. Il progetto è costruito con tecnologie moderne e un forte focus su sicurezza, performance e scalabilità.
 
@@ -43,12 +43,14 @@ amazonreplica/
 │       ├── styles/
 │       └── utils/
 ├── server/                # Backend Express
-│   ├── ssl/               # Certificati HTTPS
+│   ├── routers            # Express routers
 │   ├── .env               # Variabili d'ambiente
 │   └── index.js           # Entrypoint del server
+├── ssl/ 
 ├── .gitignore
 ├── README.md
 └── package.json
+└── db_backup.sql
 ```
 ---
 
